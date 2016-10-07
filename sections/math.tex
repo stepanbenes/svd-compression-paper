@@ -3,20 +3,31 @@
 
 Singular Value Decomposition in general
 
+
+\subsection{Error estimation}
+
 (following taken from \cite{SairaBanu2015})
 
 Compression ratio:
-$$CR=\frac{m*n}{r(m+n+1)}$$
+$$CR=\frac{m n}{r(m+n+1)}$$
 
 Mean square error:
-$$MSE=\sum \frac{(O_{ij} - R_{ij})^{2}}{mn}$$,
-where O represents the original image and R represents the
-reconstructed image of dimension mxn.
+$$MSE=\frac{1}{m n} \sum_{i=0}^{m-1} \sum_{j=0}^{n-1} (O_{ij} - R_{ij})^{2}$$
+where \textit{O} represents the original image and \textit{R} represents the
+reconstructed image of dimension $m \times n$.
 
-Peak signal to noise ratio:
-$$PSNR=10\log({255}^{2}MSE)$$
+Rooted Mean Square Deviation:
+$$RMSD=\sqrt{MSE}$$
 
-\subsection{Error estimation}
+Normalized Rooted Mean Square Deviation:
+$$NRMSD=\frac{RMSD}{X_{max}-X_{min}}=\frac{\sqrt{MSE}}{X_{max}-X_{min}}$$
+
+Peak signal to noise ratio [db]:
+$$PSNR=10\log_{10}\frac{(X_{max}-X_{min})^{2}}{MSE}$$
+
+$$PSNR=20\log_{10}\frac{X_{max}-X_{min}}{\sqrt{MSE}}=20\log_{10}\frac{1}{NRMSD}$$
+
+$$PSNR=-20\log_{10}NRMSD$$
 
 \subsection{Randomized SVD}
 
