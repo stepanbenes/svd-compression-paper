@@ -3,74 +3,60 @@
 
 \begin{figure}[ht]
 \centering\includegraphics[width=\textwidth]{figures/temelin_screenshot}
-\caption{Figure caption}
+\caption{Temelin nuclear power plant. Results visualization (Displacement field, X component).}
+\label{fig:temelin:mesh}
 \end{figure}
 
 \begin{figure}[ht]
 \centering\includegraphics[width=\textwidth]{figures/chotkova_screenshot}
-\caption{Figure caption}
+\caption{Chotkova geologic layers. Results visualization (Stress field, sigma XX component).}
+\label{fig:chotkova:mesh}
 \end{figure}
 
 \begin{figure}[ht]
 \centering\includegraphics[width=\textwidth]{figures/mechaxisym_screenshot}
-\caption{Figure caption}
+\caption{"Mechaxisym" model. Results visualization (Displacement field, X component).}
+\label{fig:mechaxisym:mesh}
 \end{figure}
 
 \begin{figure}[ht]
 \centering\includegraphics[width=\textwidth]{figures/chotkova_NRMSD}
-\caption{Figure caption}
-\end{figure}
-
-\begin{figure}[ht]
-\centering\includegraphics[width=\textwidth]{figures/chotkova_PSNR}
-\caption{Figure caption}
+\caption{Dependence of Normalized Rooted Mean Squared Deviation on Compression ratio for Chotkova project results.}
+\label{fig:chotkova:NRMSD}
 \end{figure}
 
 \begin{figure}[ht]
 \centering\includegraphics[width=\textwidth]{figures/chotkova_MaxError}
-\caption{Figure caption}
+\caption{Dependence of Normalized Max Error on Compression ratio for Chotkova project results.}
+\label{fig:chotkova:MaxError}
 \end{figure}
 
 \begin{figure}[ht]
 \centering\includegraphics[width=\textwidth]{figures/mechaxisym_NRMSD}
-\caption{Figure caption}
-\end{figure}
-
-\begin{figure}[ht]
-\centering\includegraphics[width=\textwidth]{figures/mechaxisym_PSNR}
-\caption{Figure caption}
+\caption{Dependence of Normalized Rooted Mean Squared Deviation on Compression ratio for Mechaxisym project results.}
+\label{fig:mechaxisym:NRMSD}
 \end{figure}
 
 \begin{figure}[ht]
 \centering\includegraphics[width=\textwidth]{figures/temelin_NRMSD}
-\caption{Figure caption}
+\caption{Dependence of Normalized Rooted Mean Squared Deviation on Compression ratio for Temelin project results.}
+\label{fig:temelin:NRMSD}
 \end{figure}
 
 \begin{figure}[ht]
-\centering\includegraphics[width=\textwidth]{figures/temelin_PSNR}
-\caption{Figure caption}
+\centering\includegraphics[width=\textwidth]{figures/PSNR}
+\caption{Comparison of Peek signal to noise ratio value calculated for different decompositions.}
+\label{fig:PSNR}
 \end{figure}
 
 \begin{figure}[ht]
-\centering\includegraphics[width=\textwidth]{figures/temelin_PSNR_rand}
-\caption{Figure caption}
+\centering\includegraphics[width=\textwidth]{figures/PSNR_rand}
+\caption{Comparison of Peek signal to noise ratio value for different randomized decompositions.}
+\label{fig:PSNR_rand}
 \end{figure}
 
-%\begin{table}[ht]
-%\centering
-%\begin{tabular}{l l l l}
-%\hline
-%\textbf{Rank} & \textbf{5} & \textbf{10} & \textbf{15}\\
-%\hline
-%Compression ratio & 0 & 0 & 0 \\
-%Compression time \\
-%Reconstruction time \\
-%Error \\
-%\hline
-%\end{tabular}
-%\caption{Performance characteristics of SVD on "Example name"}
-%\end{table}
-
-% Performance characteristics of Randomized SVD on same analyses
-
-% Graphs: Error/Rank, Speed/Rank
+\begin{figure}[ht]
+\centering\includegraphics[width=\textwidth]{figures/temelin_ExecutionTime}
+\caption{Variation of execution time of standard and randomized decompositions calculated for Temelin project results. Execution time of standard SVD is independent of target rank whereas execution time of randomized SVD decreases linearly with increasing target rank.}
+\label{fig:temelin:ExeTime}
+\end{figure}
