@@ -1,33 +1,51 @@
 \section{Mathematical background}
 \label{sec:math}
 
-Singular Value Decomposition in general
+\todo[inline]{Singular Value Decomposition in general}
 
 % Describe how to calculate decomposition of arbitrary matrix with example
 
 \subsection{Error estimation}
+\label{sec:error}
 
 \todo[inline]{Singular values and norms of matrix}
 
 (following taken from \cite{SairaBanu2015})
 
 Mean square error:
-$$MSE=\frac{1}{m n} \sum_{i=0}^{m-1} \sum_{j=0}^{n-1} (O_{ij} - R_{ij})^{2}$$
-where \textit{O} represents the original image and \textit{R} represents the
+\begin{equation}
+MSE=\frac{1}{m n} \sum_{i=1}^{m} \sum_{j=1}^{n} (A_{ij} - A'_{ij})^{2}
+\label{eq:mse-def}
+\end{equation}
+
+where \textit{A} represents the original image and \textit{A'} represents the
 reconstructed image of dimension $m \times n$.
 
 Rooted Mean Square Deviation:
-$$RMSD=\sqrt{MSE}$$
+\begin{equation}
+RMSD=\sqrt{MSE}
+\label{eq:rmsd-def}
+\end{equation}
 
 Normalized Rooted Mean Square Deviation:
-$$NRMSD=\frac{RMSD}{X_{max}-X_{min}}=\frac{\sqrt{MSE}}{X_{max}-X_{min}}$$
+\begin{equation}
+NRMSD=\frac{RMSD}{X_{max}-X_{min}}=\frac{\sqrt{MSE}}{X_{max}-X_{min}}
+\label{eq:nrmsd-def}
+\end{equation}
 
 Peak signal to noise ratio [db]:
-$$PSNR=10\log_{10}\frac{(X_{max}-X_{min})^{2}}{MSE}$$
+\begin{equation}
+PSNR=10\log_{10}\frac{(X_{max}-X_{min})^{2}}{MSE}
+\end{equation}
 
-$$PSNR=20\log_{10}\frac{X_{max}-X_{min}}{\sqrt{MSE}}=20\log_{10}\frac{1}{NRMSD}$$
+\begin{equation}
+PSNR=20\log_{10}\frac{X_{max}-X_{min}}{\sqrt{MSE}}=20\log_{10}\frac{1}{NRMSD}
+\end{equation}
 
-$$PSNR=-20\log_{10}NRMSD$$
+\begin{equation}
+PSNR=-20\log_{10}NRMSD
+\label{eq:psnr-def}
+\end{equation}
 
 \subsection{Sparse matrix of details}
 

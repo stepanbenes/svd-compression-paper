@@ -21,21 +21,28 @@ Only single field component is considered to fill the input matrix $\mtrx{A}$. R
 
 \subsection{Low-rank approximation matrix}
 
-\todo[inline]{Pokracovat vysvetlenim aproximace pomoci matice s nizsi hodnosti. Inspirovat se clankem \cite{SairaBanu2015}, pridat rovnice a diagram}
-
 From the properties of SVD method presented in section \ref{sec:math} it follows the fact that a matrix can be represented in the form of its SVD components as a sum of rank 1 matrices in the form
 
-$$\mtrx{A}=\mtrx{U_{1}}S_{1}\mtrx{V_{1}^{T}}+\mtrx{U_{2}}S_{2}\mtrx{V_{2}^{T}}+ ... +\mtrx{U_{n}}S_{n}\mtrx{V_{n}^{T}},$$
+\begin{equation}
+\mtrx{A}=\mtrx{U_{1}}S_{1}\mtrx{V_{1}^{T}}+\mtrx{U_{2}}S_{2}\mtrx{V_{2}^{T}}+ ... +\mtrx{U_{n}}S_{n}\mtrx{V_{n}^{T}},
+\label{eq:svd-expansion}
+\end{equation}
 
 where $S_{i}$ is $i$-th singular value, $U_{i}$, $V_{i}$ are corresponding singular vectors, and $n$ is the rank of the matrix $\mtrx{A}$. Considering the fact that singular values are ordered $S_{1}>S_{2}>S_{3}> ... >S_{n}$ the above formula implies that the first term would have the highest contribution and last term would have the lowest contribution to the matrix~$\mtrx{A}$. Therefore if we take only first $r$ members of the above summation we get approximation of the matrix $\mtrx{A}$
 
-$$\mtrx{A'}=\mtrx{U_{1}}S_{1}\mtrx{V_{1}^{T}}+\mtrx{U_{2}}S_{2}\mtrx{V_{2}^{T}}+ ... +\mtrx{U_{r}}S_{r}\mtrx{V_{r}^{T}}.$$
+\begin{equation}
+\mtrx{A'}=\mtrx{U_{1}}S_{1}\mtrx{V_{1}^{T}}+\mtrx{U_{2}}S_{2}\mtrx{V_{2}^{T}}+ ... +\mtrx{U_{r}}S_{r}\mtrx{V_{r}^{T}}.
+\label{eq:svd-approx-expansion}
+\end{equation}
 
 The quality of approximation depends on the magnitude of the singular values omitted from the approximation formula, namely $S_{r+1} ...  S_{n}$. The compression algorithm is based on assumption that the first singular value is order-of-magnitude higher than singular values at the end of the decomposition sequence. In special cases, when $r=n$, or $S_{i}=0$ for all $i \geq r$ the omitted singular values do not contribute to the sum and the compression is therefore loss-less. In other cases approximation error has to be calculated and taken into account to avoid loss of important details in data.
 
 The main goal of the compression algorithm is to find a compromise between low approximation error and high compression ratio $CR$ which is calculated using the formula
 
-$$CR=\frac{r(m+n+1)}{m n},$$
+\begin{equation}
+CR=\frac{r(m+n+1)}{m n},
+\label{eq:cr-def}
+\end{equation}
 
 where $m$ and $n$ are dimensions of matrix $\mtrx{A^{m \times n}}$. Explanation of the compression ratio formula is best done using Figure~\ref{fig:lowrank_svd}. Light color represents the part of matrix decomposition that is to be stored in the output file as a low-rank approximation of the input.
 
@@ -51,17 +58,45 @@ $$r<\frac{m n}{m+n+1}.$$
 
 Considering the usual shape of matrix containing FEM results this inequality is easily satisfiable even for the $r$ being close to the rank of the original matrix as in the typical case the number of nodes or integration-points is much higher than the number of analysis steps and therefore $m<<n$.
 
-Once the SVD decomposition is calculated for the result component there are two strategies how to proceed with the compression. Each strategy is assigned a control parameter that determines resulting compression ratio or approximation error.
+Once the SVD decomposition is calculated for the result component there are two strategies how to proceed with the compression -- size or quality. Each strategy is assigned a control parameter that determines resulting compression ratio or approximation error.
+
+\todo[inline]{Replace itemization with sub-sub-sections?}
+
 \begin{itemize}
-\item \textbf{size} -- If the focus is only on the size of compressed data, the rank $r$ of the approximation matrix can be calculated by the formula
+\item \textbf{compression ratio} -- If the focus is only on the size of compressed data, the rank $r$ of the approximation matrix can be calculated by the formula
 
-$$r=\ceil*{s \times \frac{m n}{m+n+1}},$$
+\begin{equation}
+r=\ceil*{CR \times \frac{m n}{m+n+1}},
+\end{equation}
 
-where $s$ is the size factor, $0 \leq s \leq 1$.
+where $CR$ is the compression ratio, $0 \leq CR \leq 1$ ($0$ results in absolute compression while $1$ results in no compression).
 
-\item \textbf{quality} -- Often the most important parameter to follow is the approximation error. ...
+\item \textbf{approximation error} -- In the usual case the most important parameter to take into account is the approximation error. Algorithm is trying to minimize the compression ratio while at the same time ensuring that predefined limit of approximation error is not exceeded. To quantify the error the Mean squared error ($MSE$) metric is used. To be able to compare different data-sets having different scales the normalized version of $MSE$ is used - Normalized root-mean-square deviation ($NRMSD$). Both metrics are defined in section \ref{sec:error}.
 
-\todo[inline]{Pridat odvozeni vypoctu NRMSD ze singularnich cisel a pote postup, jak ziskat ze singularnich cisel a quality faktoru parametr r}
+But how can be the rank of approximation matrix effectively calculated from the desired approximation error? Here comes handy the interesting property of the singular values:
+
+\begin{equation}
+\sum_{i=1}^{m} \sum_{j=1}^{n} (M_{ij})^{2} = \sum_{i=1}^{k}{\sigma_{i}^{2}},
+\label{eq:elem-sqr-sigma-sqr}
+\end{equation}
+
+where $k=min(m, n)$, i.e. the smallest of two dimensions of the matrix $M$. From the above follows that the squared sum of elements of a matrix $M$ equals to the squared sum of its singular values $\sigma_{i}$. \todo{Reference to source or further explanation needed.} Using formulas \eqref{eq:svd-expansion} and \eqref{eq:svd-approx-expansion} the equation \eqref{eq:elem-sqr-sigma-sqr} can be applied to the difference between original matrix $A$ and approximation matrix $A'$:
+
+\begin{equation}
+\sum_{i=1}^{m} \sum_{j=1}^{n} (A_{ij} - A'_{ij})^{2} = \sum_{i=r+1}^{k}{\sigma_{i}^{2}},
+\end{equation}
+
+where the term on the right-hand side is the sum of squares of those singular values of the matrix $A$ that are cut away by the compression algorithm. The equation can be rewritten using the definition of $MSE$ in \eqref{eq:mse-def}:
+
+\begin{equation}
+MSE \times m n = \sigma_{r+1}^{2} + \sigma_{r+2}^{2} + ... + \sigma_{k-1}^{2} + \sigma_{k}^2.
+\end{equation}
+
+\begin{equation}
+(NRMSD \times (X_{max}-X_{min}))^{2} \times m n = \sigma_{r+1}^{2} + \sigma_{r+2}^{2} + ... + \sigma_{k-1}^{2} + \sigma_{k}^2.
+\end{equation}
+
+\todo[inline]{Describe how to calculate rank of approximation matrix - take only the amount of singular values, that the value is lower than ...}
 
 \end{itemize}
 
@@ -70,6 +105,24 @@ where $s$ is the size factor, $0 \leq s \leq 1$.
 \subsection{Algorithm description}
 
 \todo[inline]{algorithm steps ... popsat to, co se deje ve funkci Compress v SvdCompressionService, nepopisovat samotnou SVD, to by melo byt popsanot v sekci Mathematical background}
+
+\begin{algorithm}
+  \caption{Euclid’s algorithm}\label{euclid}
+  \begin{algorithmic}[1]
+    \Procedure{Euclid}{$a,b$}\Comment{The g.c.d. of a and b}
+      \State $r\gets a\bmod b$
+      \While{$r\not=0$}\Comment{We have the answer if r is 0}
+        \State $a\gets b$
+        \State $b\gets r$
+        \State $r\gets a\bmod b$
+      \EndWhile\label{euclidendwhile}
+      \For{\texttt{<some condition>}}
+        \State \texttt{<do stuff>}
+      \EndFor
+      \State \textbf{return} $b$\Comment{The gcd is b}
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
 
 \subsection{Optimization}
 
