@@ -49,4 +49,14 @@ PSNR=-20\log_{10}NRMSD
 
 \subsection{Sparse matrix of details}
 
+\todo[inline]{Mozna tento odstavec uplne vyhodit, stejne to neni implementovano -- uvest jen v sekci Optimization nebo v Conclusion}
+
 \subsection{Randomized SVD}
+Exact SVD of a $m \times n$ matrix has time complexity $O(min(mn^2, m^2n))$ using the "big-O" notation.
+
+Assume the data points are in the columns of $\mtrx{A} \in \mtrx{M_{m,n}}(\mathbb{R})$ where $m \leq n$. Note that $\mtrx{AA^T}$ is the dataset covariance matrix. Then a simple method is to randomly choose $k<m$ columns of $\mtrx{A}$ that form a matrix $\mtrx{S}$. Statistically, the SVD of $\mtrx{SS^T}$ will be close to that of $\mtrx{AA^T}$; thus it suffices to calculate the SVD of $\mtrx{S}$, the complexity of which, is only $O(k^2m)$.
+
+\todo[inline]{Je tohle stejny randomizovany algoritmus jako pouzivam ja v RedSVD? V clanku se mluvi o Monte Carlo...}
+
+% http://mathoverflow.net/questions/161252/what-is-the-time-complexity-of-truncated-svd
+% http://sysrun.haifa.il.ibm.com/hrl/bigml/files/Holmes.pdf

@@ -1,15 +1,11 @@
 \section{Implementation}
 \label{sec:implementation}
 
-%Application of Singular Value Decomposition to FEM results compression
-
 The objective of the compression algorithm is to reduce amount of data representing FEM results and also the ability to reconstruct original data from its smaller representation. This saves storage capacity and also accelerates data transfer between computers as the analysis itself and the post-processing of results is usually done on different work stations.
 
 Compression method can be lossy or lossless based on quality of data reconstructed of its compressed representation. Lossless methods are able to fully recreate original data. Lossy methods on the other hand produce only approximations of original data. 
 
 SVD is used as part of the compression algorithm. SVD method applied to arbitrary matrix produces decomposition that consist of corresponding singular values and singular vectors. This process is fully reversible (with the assumption that the numerical errors are negligible). The original matrix can be reconstructed by the multiplication of decomposed parts. However, the compression algorithm is based on modification of decomposition to create \textbf{low-rank approximation matrix}. The reconstructed matrix slightly differs from the original matrix and algorithm therefore does \textbf{lossy} compression.
-
-% jak ziskam matici na kterou aplikuji SVD? popsat z ceho se skladaji fem data a jak se naskladaji do matice
 
 SVD decomposition is applied on matrices. The first thing to do is therefore to assemble an input matrix. Results from the Finite element method are discrete values calculated in nodes or integration points. There are usually multiple fields in result data (e.g. Displacements, Stress, Strain etc.) and each field can have multiple components (e.g. Displacements can have $X$, $Y$ and $Z$ component). As non-linear analyses usually lead to multiple computation steps there are multiple sets of data per each field component. All data corresponding to a single field component forms the input matrix to the compression algorithm. Let's call it matrix $\mtrx{A}$. Each row of matrix $\mtrx{A}$ corresponds to single time step and each column correspond to single node or integration point.
 
@@ -58,12 +54,11 @@ $$r<\frac{m n}{m+n+1}.$$
 
 Considering the usual shape of matrix containing FEM results this inequality is easily satisfiable even for the $r$ being close to the rank of the original matrix as in the typical case the number of nodes or integration-points is much higher than the number of analysis steps and therefore $m<<n$.
 
-Once the SVD decomposition is calculated for the result component there are two strategies how to proceed with the compression -- size or quality. Each strategy is assigned a control parameter that determines resulting compression ratio or approximation error.
+\subsection{Algorithm description}
+Once the SVD decomposition is calculated the compression algorithm removes a certain number of singular values and corresponding singular vectors. The remaining singular values and vectors represent the compressed data. There are two strategies that influence the way how to get the number of singular values to be preserved -- resulting size and quality. Each strategy is assigned a control parameter that determines compression ratio or approximation error.
 
-\todo[inline]{Replace itemization with sub-sub-sections?}
-
-\begin{itemize}
-\item \textbf{compression ratio} -- If the focus is only on the size of compressed data, the rank $r$ of the approximation matrix can be calculated by the formula
+\paragraph{Compression ratio}
+If the focus is only on the size of compressed data, the rank $r$ of the approximation matrix can be calculated by the formula
 
 \begin{equation}
 r=\ceil*{CR \times \frac{m n}{m+n+1}},
@@ -71,64 +66,75 @@ r=\ceil*{CR \times \frac{m n}{m+n+1}},
 
 where $CR$ is the compression ratio, $0 \leq CR \leq 1$ ($0$ results in absolute compression while $1$ results in no compression).
 
-\item \textbf{approximation error} -- In the usual case the most important parameter to take into account is the approximation error. Algorithm is trying to minimize the compression ratio while at the same time ensuring that predefined limit of approximation error is not exceeded. To quantify the error the Mean squared error ($MSE$) metric is used. To be able to compare different data-sets having different scales the normalized version of $MSE$ is used - Normalized root-mean-square deviation ($NRMSD$). Both metrics are defined in section \ref{sec:error}.
+\paragraph{Approximation error}
+In the usual case the most important parameter to take into account is the approximation error. Algorithm is trying to minimize the compression ratio while at the same time ensuring that predefined limit of approximation error is not exceeded. To quantify the error the Mean squared error ($MSE$) metric is used. To be able to compare different data-sets having different scales the normalized version of $MSE$ is used - Normalized root-mean-square deviation ($NRMSD$). Both metrics are defined in section \ref{sec:error}.
 
-But how can be the rank of approximation matrix effectively calculated from the desired approximation error? Here comes handy the interesting property of the singular values:
+But how can be the rank of approximation matrix effectively calculated from the desired approximation error? Here comes useful the interesting property of the singular values
 
 \begin{equation}
-\sum_{i=1}^{m} \sum_{j=1}^{n} (M_{ij})^{2} = \sum_{i=1}^{k}{\sigma_{i}^{2}},
+\sum_{i=1}^{m} \sum_{j=1}^{n} (\mtrx{A_{ij}})^{2} = \sum_{i=1}^{k}{\sigma_{i}^{2}},
 \label{eq:elem-sqr-sigma-sqr}
 \end{equation}
 
-where $k=min(m, n)$, i.e. the smallest of two dimensions of the matrix $M$. From the above follows that the squared sum of elements of a matrix $M$ equals to the squared sum of its singular values $\sigma_{i}$. \todo{Reference to source or further explanation needed.} Using formulas \eqref{eq:svd-expansion} and \eqref{eq:svd-approx-expansion} the equation \eqref{eq:elem-sqr-sigma-sqr} can be applied to the difference between original matrix $A$ and approximation matrix $A'$:
+where $k=min(m, n)$, i.e. the smallest of two dimensions of the matrix $M$. The above formula states that the sum of squared elements of matrix $\mtrx{A}$ equals to the sum of squared singular values $\sigma_{i}$ of the same matrix $\mtrx{A}$. \todo{Reference to source or further explanation needed.} Using formulas \eqref{eq:svd-expansion} and \eqref{eq:svd-approx-expansion} the equation \eqref{eq:elem-sqr-sigma-sqr} can be applied to the difference between original matrix $\mtrx{A}$ and approximation matrix $A'$.
 
 \begin{equation}
-\sum_{i=1}^{m} \sum_{j=1}^{n} (A_{ij} - A'_{ij})^{2} = \sum_{i=r+1}^{k}{\sigma_{i}^{2}},
+\sum_{i=1}^{m} \sum_{j=1}^{n} (\mtrx{A_{ij}} - \mtrx{A'_{ij}})^{2} = \sum_{i=r+1}^{k}{\sigma_{i}^{2}},
 \end{equation}
 
-where the term on the right-hand side is the sum of squares of those singular values of the matrix $A$ that are cut away by the compression algorithm. The equation can be rewritten using the definition of $MSE$ in \eqref{eq:mse-def}:
+where the term on the right-hand side is the sum of squares of those singular values of the matrix $A$ that are going to be cut away by the compression algorithm. The equation can be rewritten using the definition of $MSE$ in \eqref{eq:mse-def} to
 
 \begin{equation}
-MSE \times m n = \sigma_{r+1}^{2} + \sigma_{r+2}^{2} + ... + \sigma_{k-1}^{2} + \sigma_{k}^2.
+MSE \times m n = \sigma_{r+1}^{2} + \sigma_{r+2}^{2} + ... + \sigma_{k-1}^{2} + \sigma_{k}^2
 \end{equation}
+
+and using \eqref{eq:nrmsd-def} further to
 
 \begin{equation}
 (NRMSD \times (X_{max}-X_{min}))^{2} \times m n = \sigma_{r+1}^{2} + \sigma_{r+2}^{2} + ... + \sigma_{k-1}^{2} + \sigma_{k}^2.
 \end{equation}
 
-\todo[inline]{Describe how to calculate rank of approximation matrix - take only the amount of singular values, that the value is lower than ...}
+Then $NRMSD$ can be used as a quality metric for the compression algorithm because normalization makes it usable for different datasets. Calculation of rank of the approximation matrix is depicted as pseudo-code in algorithm \ref{alg:rank-calculation}. Algorithm uses the following inequality to test whether the desired rank has been reached
 
-\end{itemize}
+\begin{equation}
+e > \frac{\sqrt[]{\frac{\sigma_{r+1}^{2} + \sigma_{r+2}^{2} + ... + \sigma_{k-1}^{2} + \sigma_{k}^2}{m n}}}{X_{max}-X_{min}},
+\end{equation}
 
-\todo[inline]{jak se pocita chyba; jak se da ridit maximalni chyba;}
-
-\subsection{Algorithm description}
-
-\todo[inline]{algorithm steps ... popsat to, co se deje ve funkci Compress v SvdCompressionService, nepopisovat samotnou SVD, to by melo byt popsanot v sekci Mathematical background}
+where $e$ is NRMSD used as an error limit that can not be exceeded to achieve reasonable quality of approximation.
 
 \begin{algorithm}
-  \caption{Euclid’s algorithm}\label{euclid}
+  \caption{Calculation of rank for approximation matrix from max allowed error}\label{rankAlgorithm}
+  \label{alg:rank-calculation}
   \begin{algorithmic}[1]
-    \Procedure{Euclid}{$a,b$}\Comment{The g.c.d. of a and b}
-      \State $r\gets a\bmod b$
-      \While{$r\not=0$}\Comment{We have the answer if r is 0}
-        \State $a\gets b$
-        \State $b\gets r$
-        \State $r\gets a\bmod b$
-      \EndWhile\label{euclidendwhile}
-      \For{\texttt{<some condition>}}
-        \State \texttt{<do stuff>}
-      \EndFor
-      \State \textbf{return} $b$\Comment{The gcd is b}
+  	\INPUT max allowed error ($e$), array with singular values ($S$), element count ($c$), max element value ($x_{max}$), min element value ($x_{min}$)
+    \OUTPUT rank of resulting matrix
+    \Procedure{CalculateRank}{$e, S, c, x_{max}, x_{min}$}
+      \State $MSE \gets 0$
+      \State $NRMSD \gets 0$
+      \State $rank \gets S.length$
+      \While{$NRMSD < e$}\Comment{repeat until max error is reached}
+        \State $MSE \gets MSE + S[rank]/c$ \Comment{calculate MSE for current rank}
+        \State $NRMSD \gets \sqrt{MSE} / (x_{max} - x_{min})$ \Comment{normalize error}
+        \State $rank \gets rank - 1$ \Comment{decrement rank for next loop}
+      \EndWhile
+      \State \textbf{return} $rank + 1$ \Comment{Add one to not exceed max allowed error}
     \EndProcedure
   \end{algorithmic}
 \end{algorithm}
 
 \subsection{Optimization}
 
-\todo[inline]{At first: algorithm complexity (kniha od JK os SVD - je tam slozitost algoritmu); table with execution times...}
+Time complexity of the exact SVD decomposition algorithm is $$O(m^2n),$$
+% http://mathoverflow.net/questions/161252/what-is-the-time-complexity-of-truncated-svd
 
-\todo{pridat odvozeni}
-Complexity: $mn^2$ where $m \leq n$ % http://mathoverflow.net/questions/161252/what-is-the-time-complexity-of-truncated-svd
+where $m<n$. This theoretical algorithm complexity is confirmed by two benchmarks where the dependency of execution time on varying matrix dimension is shown. The results of the benchmarks are depicted in Figure \ref{fig:ExeTime_rows} and Figure \ref{fig:ExeTime_columns}. Several observations were made from the results:
 
-\todo[inline]{Then main features for optimization: key time steps (time step span compression), Randomized SVD, Parallelization, Sparse matrix of details, prenasobeni U matice singularnimi cisly, trochu usetrim pamet...}
+\begin{itemize}
+\item The algorithm is most efficient in cases where one dimension of the input matrix is very low compared to the other. However, this is almost always the case when compressing results from FEM -- number of time steps seldom exceeds hundreds.
+\item Moreover, time steps can be split into smaller ranges and the algorithm can be applied on each range separately. This will improve performance and can also increase quality of compression the key time steps on the range boundaries are carefully selected.
+\item Randomized SVD algorithm has the same order of algorithmic complexity but even then can help to significantly reduce execution time.
+\end{itemize}
+
+Storage size of SVD decomposition itself can also be optimized in several ways. E.g. $\mtrx{\Sigma}$ being a diagonal matrix can be stored as single list of singular values $\sigma_{i}$ or can be even multiplied with the matrix of left singular vectors $\mtrx{U}$.
+
+% main features for optimization: key time steps (time step span compression), Randomized SVD, Parallelization, Sparse matrix of details, prenasobeni U matice singularnimi cisly, trochu usetrim pamet, mohu pouzit vzorkovani...
