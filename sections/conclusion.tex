@@ -3,6 +3,13 @@
 
 \todo[inline]{Add conclusion - discussion of results mainly}
 
-% 
+% Popsat hlavni vysledek prace: schopnost kompresovat libovolna fem data s vyuzitim matice s nizsi hodnosti (dulezite rict ze toto je ta hlavni metoda, ktera to vlastne kompresuje). U vetsiny testovanych uloh se podarilo dosahnout minimalne 10x komprese, u nekterych az 100x komprese pri zanedbatelne chybe
 
-% v minule praci jsem se soustredil na vyuziti zavislosti v prostorove dimenzi. V teto fazi se soustredim na casovou dimenzi. Dalsi moznosti je tyto dva pristupy zkombinovat.
+% Dulezity poznatek: maximalni chyba se da dopredu nastavit
+
+% Nevyhody: pomerne casove narocna operace, da se urychlit pomoci randomized SVD, pokud dopredu znam kompresni pomer a neni pro mne kriticke neprekrocit maximalni chybu.
+% Ale: jde spocitat jednou provzdy po skonceni analyzy pred samotnym postprocessingem (na vypocetnim serveru). Samotny postprocessing uz pak vyzaduje jen vynasobeni matice, coz je rychlejsi - navic - staci mi provest jen nasobeni jednoho radku, protoze v jednom okamziku vetsinou chci data jen pro jeden casovy krok
+
+% Shrnuti a budouci prace. v minule praci jsem se soustredil na vyuziti zavislosti v prostorove dimenzi. V teto fazi se soustredim na casovou dimenzi. Dalsi moznosti je tyto dva pristupy zkombinovat. Dalsi pokracovani: vyuzit optimalizace popsane v textu, paralelizovat, pouzit matici detailu
+
+% zkontrolovat abstrakt zda tam rikam stejne veci a kdyztak ho aktualizovat
