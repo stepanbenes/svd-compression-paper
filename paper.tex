@@ -128,7 +128,7 @@ Amount of data produced by complex finite element analysis can be enormous and t
 \newline
 This paper describes application of SVD to the compression of results from finite element solvers. Although the idea of image compression method is inspiration for this research work, the SVD compression algorithm used for compression of images can not be directly used upon FEM results. Differences and implementation challenges are discussed in the text. Quality of approximation is more important in scientific field then in computer graphics where the main deciding factor is the human perception of the resulting image. Error estimation methods used during compression of finite element results are presented in the text. The focus is also on the algorithm performance. SVD is very computational intensive method. Various optimization techniques, e.g. Randomized SVD, are described in the text.
 \newline
-The results of the method are presented on various finite element analyses. The method allows to control quality of compression. The compression factor depends on the nature of data input. However, for common cases that were investigated the method achieves to lower the memory consumption up to 10\% of the original size with negligible approximation error.
+The results of the method are presented on various finite element analyses. The compression factor depends on the nature of input data. However, for common cases that were investigated the method achieves to lower the memory consumption at least to 10\% of the original size with negligible approximation error. In some cases the compression ratio can be even better. The important property of the method is ability to control the quality of compression.
 
 \end{abstract}
 
@@ -136,7 +136,7 @@ The results of the method are presented on various finite element analyses. The 
 %% keywords here, in the form: keyword \sep keyword
 Finite Element Method \sep FEM \sep Compression \sep Singular Value Decomposition \sep SVD \sep Principal Component Analysis \sep Data Visualization
 
-% keyword PCA: vymazat nebo uvest v textu
+% TODO: keyword PCA: vymazat nebo uvest v textu
 
 %% MSC codes here, in the form: \MSC code \sep code
 %% or \MSC[2008] code \sep code (2000 is the default)

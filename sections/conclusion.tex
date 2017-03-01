@@ -1,18 +1,12 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-%\todo[inline]{Add conclusion - discussion of results mainly}
-
 The goal of this paper is to present the use of SVD decomposition in compression of results from the Finite element method. Theoretical properties of SVD decomposition have been described, implementation details of compression algorithm have been provided, and results of its application on real data have been presented.
 
+The implemented algorithm is able to compress arbitrary data using the low-rank approximation matrices. If the max allowed error was set to 1e-5 then the compression ratio was at least 10\% for all tested results. In many cases compression ratio can be even much lower -- bellow 1\% of the original size. The important property of compression algorithm is the fact that the approximation error can be set in advance and there is a guarantee that it will not be exceeded.
 
-% Popsat hlavni vysledek prace: schopnost kompresovat libovolna fem data s vyuzitim matice s nizsi hodnosti (dulezite rict ze toto je ta hlavni metoda, ktera to vlastne kompresuje). U vetsiny testovanych uloh se podarilo dosahnout minimalne 10x komprese, u nekterych az 100x komprese pri zanedbatelne chybe
+The main disadvantage is the computational complexity of the compression algorithm. SVD decomposition is very time consumptive operation. However, this operation is performed only once after FEM analysis is finished and before the post-processing is started. Also, randomized version of SVD decomposition algorithm is much faster if you don't mind the slight increase of approximation error. % da se urychlit pomoci randomized SVD, pokud dopredu znam kompresni pomer a neni pro mne kriticke neprekrocit maximalni chybu.
 
-% Dulezity poznatek: maximalni chyba se da dopredu nastavit
+Other complication is the necessity to use special format to store compressed data in the form of SVD decomposition and the post-processor must be updated to use this new format. Post-processor must perform matrix multiplication to get the original results. However, in usual case the data for one analysis step are needed at a time. In this case only a partial multiplication of single row is enough.
 
-% Nevyhody: pomerne casove narocna operace, da se urychlit pomoci randomized SVD, pokud dopredu znam kompresni pomer a neni pro mne kriticke neprekrocit maximalni chybu.
-% Ale: jde spocitat jednou provzdy po skonceni analyzy pred samotnym postprocessingem (na vypocetnim serveru). Samotny postprocessing uz pak vyzaduje jen vynasobeni matice, coz je rychlejsi - navic - staci mi provest jen nasobeni jednoho radku, protoze v jednom okamziku vetsinou chci data jen pro jeden casovy krok
-
-% Shrnuti a budouci prace. v minule praci jsem se soustredil na vyuziti zavislosti v prostorove dimenzi. V teto fazi se soustredim na casovou dimenzi. Dalsi moznosti je tyto dva pristupy zkombinovat. Dalsi pokracovani: vyuzit optimalizace popsane v textu, paralelizovat, pouzit matici detailu
-
-% zkontrolovat abstrakt zda tam rikam stejne veci a kdyztak ho aktualizovat
+% TODO: Uvest budouci praci? (v minule praci jsem se soustredil na vyuziti zavislosti v prostorove dimenzi. V teto fazi se soustredim na casovou dimenzi. Dalsi moznosti je tyto dva pristupy zkombinovat. Dalsi pokracovani: vyuzit optimalizace popsane v textu, paralelizovat, pouzit matici detailu)
