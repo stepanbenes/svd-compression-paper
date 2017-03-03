@@ -1,14 +1,16 @@
 \section{Introduction}
 \label{sec:introduction}
 
-% Introduction to field of FEM results post-processing. Description of all terms used.
+% Introduction to field of FEM results post-processing.
 
 The effort to reduce size of resulting data from complex finite element analyses to accelerate (or even make possible) post-processing using common personal computer is not new.
 \todo[inline]{State of the art. Add references to work in this field.}
-In \cite{Benes2015} is presented one possible direction for research in this area -- the replacement of discrete data produced by finite element solver by simple continuous functions. These approximation functions can be then described be low number of parameters. The focus is on \textit{geometry}. The main goal is to find the areas in domain where the output discrete function has predictable development and can be easily replaced by e.g. linear continuous function. Although this approach has great results for some class of functions it is not applicable to problem in general. For some special cases, such as functions with discontinuities, the method has poor results because approximation error is too high and -- what is more important -- it can not be controlled in advance.
+In \cite{Benes2016} is presented one possible direction for research in this area -- the replacement of discrete data produced by finite element solver by simple continuous functions. These approximation functions can be then described be low number of parameters. The focus is on \textit{geometry}. The main goal is to find the areas in domain where the output discrete function has predictable development and can be easily replaced by e.g. linear continuous function. Although this approach has great results for some class of functions it is not applicable to problem in general. For some special cases, such as functions with discontinuities, the method has poor results because approximation error is too high and -- what is more important -- it can not be controlled in advance.
 
 In this study the purely \textit{algebraic} approach is applied.
 
-\todo[inline]{Describe alternative methods for compression: e.g. discrete 9/7 bi-orthogonal wavelet transform, discrete cosine transform, Karhunen-Loeve transform, and combinations of these}
+% TODO: Description of all terms that are used in text
 
 \subsection{Related work / State of the art}
+
+% Todo: Describe alternative methods for compression: e.g. discrete 9/7 bi-orthogonal wavelet transform, discrete cosine transform, Karhunen-Loeve transform, and combinations of these.
