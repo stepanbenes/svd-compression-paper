@@ -1,39 +1,63 @@
 \section{Mathematical background}
 \label{sec:math}
 
-\todo[inline]{Singular Value Decomposition in general}
+% TODO: Singular Value Decomposition in general
+% TODO: Describe how to calculate decomposition of arbitrary matrix with example
+% TODO: add more citations separated by comma
 
-% Describe how to calculate decomposition of arbitrary matrix with example
+Singular value decomposition (SVD) \cite{Baker2013, Kalman2002} is based on a theorem from linear algebra which says that a rectangular matrix $\mtrx{A}$ can
+be broken down into the product of three matrices - an orthogonal matrix $\mtrx{U}$, a diagonal
+matrix $\mtrx{S}$, and the transpose of an orthogonal matrix $\mtrx{V}$:
+
+\begin{equation}
+\mtrx{A_{m \times n}} = \mtrx{U_{m \times m}} \mtrx{S_{m \times n}} \mtrx{V^{T}_{n \times n}},
+\label{eq:svd-def}
+\end{equation}
+
+where $\mtrx{U^{T}U} = \mtrx{I}$, $\mtrx{V^{T}V} = \mtrx{I}$; the columns of $\mtrx{U}$ are orthonormal eigenvectors of $\mtrx{AA^{T}}$ , the
+columns of $\mtrx{V}$ are orthonormal eigenvectors of $\mtrx{A^{T}A}$, and $\mtrx{S}$ (sometimes referred to as $\mtrx{\Sigma}$) is a diagonal matrix containing singular values in descending order which are at the same time the square roots of eigenvalues from $\mtrx{U}$ or $\mtrx{V}$.
+
+SVD can be seen as a method for transforming correlated variables into a set of uncorrelated ones that better expose the various relationships among the original data items. At the same time, SVD is a method for identifying and ordering the dimensions along which data points exhibit the most variation. Once we have identified where the most variation is, it is possible to find the best approximation of the original data points using fewer dimensions. Hence, SVD can be seen as a method for data reduction/compression.
+
+This is the basic idea behind SVD: taking a high dimensional, highly variable set of data points and reducing it to a lower dimensional space that exposes the substructure of the original data more clearly and orders it from most variation to the least. What makes SVD practical for data compression applications is that you can simply ignore variation below a particular threshold to massively reduce your data but be assured that the main relationships of interest have been preserved.
 
 \subsection{Error estimation}
 \label{sec:error}
 
-\todo[inline]{Singular values and norms of matrix}
+% TODO: Singular values and norms of matrix
 
-(following taken from \cite{SairaBanu2015})
+The objective of data compression is to represent an input with lesser amount of data. However, the data reconstructed from its compressed representation may or may not be able to recreate the exact copy of original image. A compression technique can be lossy or lossless based on the quality of data it restores.
 
-Mean square error:
+Low-rank approximation matrix method that is described in this paper is a lossless compression technique. Several error metrics are used to control the quality of results \cite{SairaBanu2015}.
+
+\begin{itemize}
+\item \textbf{Mean square error}
 \begin{equation}
-MSE=\frac{1}{m n} \sum_{i=1}^{m} \sum_{j=1}^{n} (A_{ij} - A'_{ij})^{2}
+MSE=\frac{1}{m n} \sum_{i=1}^{m} \sum_{j=1}^{n} (A_{ij} - A'_{ij})^{2},
 \label{eq:mse-def}
 \end{equation}
 
-where \textit{A} represents the original image and \textit{A'} represents the
+where $\mtrx{A}$ represents the original image and $\mtrx{A'}$ represents the
 reconstructed image of dimension $m \times n$.
 
-Rooted Mean Square Deviation:
+\item \textbf{Rooted Mean Square Deviation}
 \begin{equation}
 RMSD=\sqrt{MSE}
 \label{eq:rmsd-def}
 \end{equation}
 
-Normalized Rooted Mean Square Deviation:
+\item \textbf{Normalized Rooted Mean Square Deviation}
 \begin{equation}
-NRMSD=\frac{RMSD}{X_{max}-X_{min}}=\frac{\sqrt{MSE}}{X_{max}-X_{min}}
+NRMSD=\frac{RMSD}{X_{max}-X_{min}}=\frac{\sqrt{MSE}}{X_{max}-X_{min}},
 \label{eq:nrmsd-def}
 \end{equation}
 
-Peak signal to noise ratio [db]:
+where $X_{min}$ and $X_{max}$ are elements of input matrix $\mtrx{A}$ with minimum and maximum value, respectively.
+
+\item \textbf{Peak signal to noise ratio}
+
+PSNR is most commonly used to measure the quality of reconstruction of lossy compression methods (e.g., image compression). The signal in this case is the original data, and the noise is the error introduced by compression. When comparing compression methods, PSNR is an approximation to human perception of reconstruction quality. PSNR is usually expressed in terms of the logarithmic decibel scale (dB).
+
 \begin{equation}
 PSNR=10\log_{10}\frac{(X_{max}-X_{min})^{2}}{MSE}
 \end{equation}
@@ -47,16 +71,14 @@ PSNR=-20\log_{10}NRMSD
 \label{eq:psnr-def}
 \end{equation}
 
-\subsection{Sparse matrix of details}
-
-\todo[inline]{Mozna tento odstavec uplne vyhodit, stejne to neni implementovano -- uvest jen v sekci Optimization nebo v Conclusion}
+\end{itemize}
 
 \subsection{Randomized SVD}
-Exact SVD of a $m \times n$ matrix has time complexity $O(min(mn^2, m^2n))$ using the "big-O" notation.
+In \cite{Holmes, Halko2011, Candes2009} are described randomized algorithms for constructing approximate matrix factorizations. Their main purpose is to accelerate calculations of matrix decompositions which tend to be very slow for large data sets.
 
-Assume the data points are in the columns of $\mtrx{A} \in \mtrx{M_{m,n}}(\mathbb{R})$ where $m \leq n$. Note that $\mtrx{AA^T}$ is the dataset covariance matrix. Then a simple method is to randomly choose $k<m$ columns of $\mtrx{A}$ that form a matrix $\mtrx{S}$. Statistically, the SVD of $\mtrx{SS^T}$ will be close to that of $\mtrx{AA^T}$; thus it suffices to calculate the SVD of $\mtrx{S}$, the complexity of which, is only $O(k^2m)$.
-
-\todo[inline]{Je tohle stejny randomizovany algoritmus jako pouzivam ja v RedSVD? V clanku se mluvi o Monte Carlo...}
+Exact SVD of a $m \times n$ matrix has time complexity $O(min(mn^2, m^2n))$ using the "big-O" notation. Assume the data points are in the columns of $\mtrx{A} \in \mtrx{M_{m,n}}(\mathbb{R})$ where $m \leq n$. Note that $\mtrx{AA^T}$ is the dataset covariance matrix. Then a simple method is to randomly choose $k<m$ columns of $\mtrx{A}$ that form a matrix $\mtrx{B}$. Statistically, the SVD of $\mtrx{BB^T}$ will be close to that of $\mtrx{AA^T}$; thus it suffices to calculate the SVD of $\mtrx{B}$, the complexity of which, is only $O(k^2m)$.
 
 % http://mathoverflow.net/questions/161252/what-is-the-time-complexity-of-truncated-svd
-% http://sysrun.haifa.il.ibm.com/hrl/bigml/files/Holmes.pdf
+
+
+% subsection: Sparse matrix of details: Mozna uplne vyhodit, stejne to neni implementovano -- uvest jen v sekci Optimization nebo v Conclusion
