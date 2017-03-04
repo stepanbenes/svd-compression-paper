@@ -4,13 +4,13 @@
 % Introduction to field of FEM results post-processing.
 
 The effort to reduce size of resulting data from complex finite element analyses to accelerate (or even make possible) post-processing using common personal computer is not new.
-\todo[inline]{State of the art. Add references to work in this field.}
+
+% TODO: State of the art. Add references to work in the field of FEM results post-processing.
+
 In \cite{Benes2016} is presented one possible direction for research in this area -- the replacement of discrete data produced by finite element solver by simple continuous functions. These approximation functions can be then described be low number of parameters. The focus is on \textit{geometry}. The main goal is to find the areas in domain where the output discrete function has predictable development and can be easily replaced by e.g. linear continuous function. Although this approach has great results for some class of functions it is not applicable to problem in general. For some special cases, such as functions with discontinuities, the method has poor results because approximation error is too high and -- what is more important -- it can not be controlled in advance.
 
-In this study it was decided to apply purely \textit{algebraic} approach. 
+In this study it was decided to apply purely algebraic approach. Various methods were considered, e.g. discrete wavelet transform \cite{Lui2001} and discrete cosine transform \cite{Watson1994} for their successful use in image compression. The reason why the SVD method was finally chosen is that it is well suited for all kind of data and the implementation is straightforward, considering that the results from the FEM analyses can be viewed as a series of arbitrary rectangular matrices.
 
-% TODO: Description of all terms that are used in text
+% TODO: Add references to related work and related usage of SVD for compression
 
-% Related work / State of the art
-
-% TODO: Describe alternative methods for compression: e.g. discrete 9/7 bi-orthogonal wavelet transform, discrete cosine transform, Karhunen-Loeve transform, and combinations of these.
+% TODO: Description of all terms that are used in text?
