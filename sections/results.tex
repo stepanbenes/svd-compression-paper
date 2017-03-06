@@ -4,7 +4,7 @@
 % temelin
 In Figure \ref{fig:temelin:mesh}, Figure \ref{fig:chotkova:mesh}, and Figure \ref{fig:mechaxisym:mesh} are depicted visualizations of results of analyses that were used as benchmarks for the compression algorithm. Analyses with distinct character of results were chosen intentionally to cover most cases that can occur in FEM calculations.
 
-Figure \ref{fig:temelin:mesh} shows results from an analysis of aging of nuclear power-plant's containment. This analysis includes high number of analysis steps (thousands) with very little differences between them. There is therefore potential for compression ratio to be very high as proven in Figure \ref{fig:temelin:NRMSD} examining the impact of changes in the compression ratio to the mean error of approximated results.
+Figure \ref{fig:temelin:mesh} shows results from an analysis of aging of nuclear power-plant's containment. This analysis includes high number of analysis steps (thousands) with very little differences between them. There is therefore potential for compression ratio to be very high as proven in Figure \ref{fig:temelin:NRMSD} that examines the impact of changes in the compression ratio to the mean error of approximation.
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/temelin_screenshot}
@@ -40,7 +40,7 @@ Figure \ref{fig:chotkova:mesh} shows results from an analysis of geological laye
 \end{figure}
 
 % mechaxisym
-Figure \ref{fig:mechaxisym:mesh} contains visualization of results of two-dimensional analysis. There are exactly 232 analysis steps. The resulting data has linear function character with several discontinuities in temporal dimension. There are few time steps in which resulting discrete functions have very different values compared to neighboring time steps. This was supposed to have negative impact on the quality of compression. However, as can be seen in Figure \ref{fig:mechaxisym:NRMSD}, quality is better than expected. E.g. if the rank of approximation matrix is set to 3 (compared to 232 being the rank of the original matrix) the normalized relative error (NRMSD) does not exceed 1e-5.
+Figure \ref{fig:mechaxisym:mesh} contains visualization of results of two-dimensional analysis. There are exactly 232 analysis steps. The resulting data has linear function character with several discontinuities in temporal dimension. There are few time steps in which resulting discrete functions have very different values compared to neighboring time steps. This was supposed to have negative impact on the quality of compression. However, as can be seen in Figure \ref{fig:mechaxisym:NRMSD}, the quality is better than expected. E.g. if the rank of approximation matrix is set to 3 (compared to 232 being the rank of the original matrix) the normalized relative error (NRMSD) does not exceed 1e-5.
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/mechaxisym_screenshot}
@@ -70,7 +70,7 @@ Figure \ref{fig:PSNR} summarizes the compression error for all three benchmarks 
 \end{figure}
 
 % Execution times
-Besides the error also the execution speed of compression algorithm was measured. In Figure \ref{fig:temelin:ExeTime} is comparison of execution times for standard versus and SVD compression algorithms. Interestingly, execution time of standard SVD is independent of target rank whereas execution time of randomized SVD decreases linearly with decreasing target rank. If the rank is known ahead of time the fact can be taken advantage of.
+Besides the error also the execution speed of compression algorithm was measured. In Figure \ref{fig:temelin:ExeTime} is comparison of execution times for standard versus randomized SVD compression algorithms. Interestingly, execution time of standard SVD is independent of target rank whereas execution time of randomized SVD decreases linearly with decreasing target rank. If the rank is known ahead of time the fact can be taken advantage of.
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/temelin_ExecutionTime}

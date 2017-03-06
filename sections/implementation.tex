@@ -7,31 +7,31 @@ Compression method can be lossy or lossless based on quality of data reconstruct
 
 SVD is used as part of the compression algorithm. SVD method applied to arbitrary matrix produces decomposition that consist of corresponding singular values and singular vectors. This process is fully reversible (with the assumption that the numerical errors are negligible). The original matrix can be reconstructed by the multiplication of decomposed parts. However, the compression algorithm is based on modification of decomposition to create \textbf{low-rank approximation matrix}. The reconstructed matrix slightly differs from the original matrix and algorithm therefore does \textbf{lossy} compression.
 
-SVD decomposition is applied on matrices. The first thing to do is therefore to assemble an input matrix. Results from the Finite element method are discrete values calculated in nodes or integration points. There are usually multiple fields in result data (e.g. Displacements, Stress, Strain etc.) and each field can have multiple components (e.g. Displacements can have $X$, $Y$ and $Z$ component). As non-linear analyses usually lead to multiple computation steps there are multiple sets of data per each field component. All data corresponding to a single field component forms the input matrix to the compression algorithm. Let's call it matrix $\mtrx{A}$. Each row of matrix $\mtrx{A}$ corresponds to single time step and each column correspond to single node or integration point.
+SVD decomposition is applied on matrices. The first thing to do is therefore to assemble an input matrix. Results from the Finite element method are discrete values calculated in nodes or integration points. There are usually multiple fields in result data (e.g. Displacements, Stress, Strain etc.) and each field can have multiple components (e.g. Displacements can have $X$, $Y$ and $Z$ component). As non-linear analyses usually lead to multiple computation steps there are multiple sets of data per each field component. All data corresponding to a single field component form the input matrix to the compression algorithm. Let's call it matrix $\mtrx{A}$. Each row of matrix $\mtrx{A}$ corresponds to single time step and each column corresponds to a single node or integration point.
 
 Once the matrix $\mtrx{A}$ is built for a field component the compression algorithm can be applied on it. It is purely algebraic procedure, no information about geometry of the mesh is needed. 
 
 % The compression algorithm is based on low-rank approximation matrix created from SVD decomposition. Results for time steps are not independent. They usually have some relation between them. List of singular values produced by the SVD method reveals the dependency between the singular vectors that form the orthogonal base of the matrix $\mtrx{A}$.
 
-Only single field component is considered to fill the input matrix $\mtrx{A}$. Results for different data components, even for the same field, can be independent from each other. There can also be order-of-magnitude difference between the components and the compression algorithm could potentially clear the important information in the weaker component. Another reason against merging of components is computational complexity. The smaller the matrix $\mtrx{A}$ is, the faster the decomposition algorithm performs.
+Only single field component is considered to fill the input matrix $\mtrx{A}$. Results for different data components (even for the same field) can be independent from each other. There can also be order-of-magnitude difference between the components and the compression algorithm could potentially clear the important information in the weaker component. Another reason against merging of components is computational complexity. The smaller the matrix $\mtrx{A}$ is, the faster the decomposition algorithm performs.
 
 \subsection{Low-rank approximation matrix}
 
-From the definition of SVD in (\ref{eq:svd-def}) and from the properties of SVD presented in section \ref{sec:math} follows the fact that a matrix can be represented in the form of its SVD components as a sum of rank 1 matrices in the form
+From the definition of SVD in (\ref{eq:svd-def}) and from the properties of SVD presented in section \ref{sec:math} follows the fact that a matrix can be represented in the form of its SVD components as a sum of rank-1 matrices in the form
 
 \begin{equation}
 \mtrx{A}=\mtrx{U_{1}}S_{1}\mtrx{V_{1}^{T}}+\mtrx{U_{2}}S_{2}\mtrx{V_{2}^{T}}+ ... +\mtrx{U_{n}}S_{n}\mtrx{V_{n}^{T}},
 \label{eq:svd-expansion}
 \end{equation}
 
-where $S_{i}$ is $i$-th singular value, $U_{i}$, $V_{i}$ are corresponding singular vectors, and $n$ is the rank of the matrix $\mtrx{A}$. Considering the fact that singular values are ordered $S_{1}>S_{2}>S_{3}> ... >S_{n}$ the above formula implies that the first term would have the highest contribution and last term would have the lowest contribution to the matrix~$\mtrx{A}$. Therefore if we take only first $r$ members of the above summation we get an approximation matrix
+where $S_{i}$ is $i$-th singular value, $\mtrx{U_{i}}$ and $\mtrx{V_{i}}$ are corresponding singular vectors, and $n$ is the rank of matrix~$\mtrx{A}$. Considering the fact that singular values are ordered $S_{1} \geq S_{2} \geq S_{3} \geq ... \geq S_{n}$ the above formula implies that the first term would have the highest contribution and last term would have the lowest contribution to matrix~$\mtrx{A}$. Therefore, if we take only first $r$ members of the above summation we get an approximation matrix
 
 \begin{equation}
 \mtrx{A'}=\mtrx{U_{1}}S_{1}\mtrx{V_{1}^{T}}+\mtrx{U_{2}}S_{2}\mtrx{V_{2}^{T}}+ ... +\mtrx{U_{r}}S_{r}\mtrx{V_{r}^{T}}.
 \label{eq:svd-approx-expansion}
 \end{equation}
 
-The quality of approximation depends on the magnitude of the singular values omitted from the approximation formula, namely $S_{r+1} ...  S_{n}$. The compression algorithm is based on assumption that the first singular value is order-of-magnitude higher than singular values at the end of the decomposition sequence. In special cases, when $r=n$, or $S_{i}=0$ for all $i \geq r$ the omitted singular values do not contribute to the sum and the compression is therefore loss-less. In other cases approximation error has to be calculated and taken into account to avoid loss of important details in data.
+The quality of approximation depends on the magnitude of the singular values omitted from the approximation formula, namely $S_{r+1} ...  S_{n}$. The compression algorithm is based on assumption that the first singular value is order-of-magnitude higher than singular values at the end of the decomposition sequence. In special cases, when $r=n$, or $S_{i}=0$ for all $i \geq r$ the omitted singular values do not contribute to the sum and the compression is therefore lossless. In other cases, approximation error has to be calculated and taken into account to avoid loss of important details in data.
 
 The main goal of the compression algorithm is to find a compromise between low approximation error and high compression ratio $CR$ which is calculated using the formula
 
@@ -48,7 +48,7 @@ where $m$ and $n$ are dimensions of matrix $\mtrx{A^{m \times n}}$. Explanation 
 \label{fig:lowrank_svd}
 \end{figure}
 
-Let us assume that the matrix is not empty and has full-rank. Then from the formula above follows that if $r$ equals to the rank of matrix $\mtrx{A}$ the compression ratio is always higher than one. In other words the memory consumption of stored decomposition is bigger than the size of the original matrix. To compression algorithm be applicable the parameter $r$ must conform to the condition
+Let us assume that the matrix is not empty and has full-rank. Then from the formula above follows that if $r$ equals to the rank of matrix $\mtrx{A}$ the compression ratio is always higher than one. In other words the memory consumption of stored decomposition is bigger than the size of the original matrix. To make the compression algorithm applicable the parameter $r$ must conform to the condition
 
 $$r<\frac{m n}{m+n+1}.$$
 
@@ -78,9 +78,9 @@ But how can be the rank of approximation matrix effectively calculated from the 
 \label{eq:elem-sqr-sigma-sqr}
 \end{equation}
 
-where $k=min(m, n)$, i.e. the smallest of two dimensions of the matrix $M$. The above formula states that the sum of squared elements of matrix $\mtrx{A}$ equals to the sum of squared singular values $\sigma_{i}$ of the same matrix $\mtrx{A}$.
+where $k=min(m, n)$, i.e. the smallest of two dimensions of the matrix $\mtrx{M}$. The above formula states that the sum of squared elements of matrix $\mtrx{A}$ equals to the sum of squared singular values $\sigma_{i}$ of the same matrix $\mtrx{A}$.
 
-Using formulas \eqref{eq:svd-expansion} and \eqref{eq:svd-approx-expansion} the equation \eqref{eq:elem-sqr-sigma-sqr} can be applied to the difference between original matrix $\mtrx{A}$ and approximation matrix $A'$.
+Using formulas \eqref{eq:svd-expansion} and \eqref{eq:svd-approx-expansion} the equation \eqref{eq:elem-sqr-sigma-sqr} can be applied to the difference between original matrix $\mtrx{A}$ and approximation matrix $\mtrx{A'}$.
 
 \begin{equation}
 \sum_{i=1}^{m} \sum_{j=1}^{n} (\mtrx{A_{ij}} - \mtrx{A'_{ij}})^{2} = \sum_{i=r+1}^{k}{\sigma_{i}^{2}},
@@ -135,8 +135,8 @@ where $m<n$. This theoretical algorithm complexity is confirmed by two benchmark
 
 \begin{itemize}
 \item The algorithm is most efficient in cases where one dimension of the input matrix is very low compared to the other. However, this is almost always the case when compressing results from FEM -- number of time steps seldom exceeds hundreds.
-\item Moreover, time steps can be split into smaller ranges and the algorithm can be applied on each range separately. This will improve performance and can also increase quality of compression the key time steps on the range boundaries are carefully selected.
-\item Randomized SVD algorithm has the same order of algorithmic complexity but even then can help to significantly reduce execution time.
+\item Moreover, time steps can be split into smaller ranges and the algorithm can be applied on each range separately. This will improve performance and can also increase quality of compression if the key time steps on the range boundaries are carefully selected.
+\item Randomized SVD algorithm has the same order of algorithmic complexity but yet can help to significantly reduce execution time.
 \end{itemize}
 
 Storage size of SVD decomposition itself can also be optimized in several ways. E.g. $\mtrx{\Sigma}$ being a diagonal matrix can be stored as single list of singular values $\sigma_{i}$ or can be even multiplied with the matrix of left singular vectors $\mtrx{U}$.

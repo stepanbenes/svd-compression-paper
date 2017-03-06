@@ -37,8 +37,8 @@ MSE=\frac{1}{m n} \sum_{i=1}^{m} \sum_{j=1}^{n} (A_{ij} - A'_{ij})^{2},
 \label{eq:mse-def}
 \end{equation}
 
-where $\mtrx{A}$ represents the original image and $\mtrx{A'}$ represents the
-reconstructed image of dimension $m \times n$.
+where $A_{ij}$ represents an element of the original matrix and $A'_{ij}$ represents an element of the
+reconstructed matrix of dimension $m \times n$.
 
 \item \textbf{Rooted Mean Square Deviation}
 \begin{equation}
@@ -56,7 +56,7 @@ where $X_{min}$ and $X_{max}$ are elements of input matrix $\mtrx{A}$ with minim
 
 \item \textbf{Peak signal to noise ratio}
 
-PSNR is most commonly used to measure the quality of reconstruction of lossy compression methods (e.g., image compression). The signal in this case is the original data, and the noise is the error introduced by compression. When comparing compression methods, PSNR is an approximation to human perception of reconstruction quality. PSNR is usually expressed in terms of the logarithmic decibel scale (dB).
+PSNR is most commonly used to measure the quality of reconstruction of lossy compression methods (e.g. image compression). The signal in this case is the original data, and the noise is the error introduced by compression. When comparing compression methods, PSNR is an approximation to human perception of reconstruction quality. PSNR is usually expressed in terms of the logarithmic decibel scale (dB).
 
 \begin{equation}
 PSNR=10\log_{10}\frac{(X_{max}-X_{min})^{2}}{MSE}
