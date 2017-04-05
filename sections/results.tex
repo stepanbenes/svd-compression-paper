@@ -35,16 +35,16 @@ Figure \ref{fig:chotkova:mesh} shows results from an analysis of geological laye
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/chotkova_MaxError}
-\caption{Dependence of Normalized Max Error on Compression ratio for Chotkova project results.}
+\caption{Dependence of Normalized Maximum Error on Compression ratio for Chotkova project results.}
 \label{fig:chotkova:MaxError}
 \end{figure}
 
 % mechaxisym
-Figure \ref{fig:mechaxisym:mesh} contains visualization of results of two-dimensional analysis. There are exactly 232 analysis steps. The resulting data has linear function character with several discontinuities in temporal dimension. There are few time steps in which resulting discrete functions have very different values compared to neighboring time steps. This was supposed to have negative impact on the quality of compression. However, as can be seen in Figure \ref{fig:mechaxisym:NRMSD}, the quality is better than expected. E.g. if the rank of approximation matrix is set to 3 (compared to 232 being the rank of the original matrix) the normalized relative error (NRMSD) does not exceed 1e-5.
+Figure \ref{fig:mechaxisym:mesh} contains visualization of results of two-dimensional analysis. There are exactly 232 analysis steps. The resulting data has linear function character with several discontinuities in temporal dimension. There are few time steps in which resulting discrete functions have very different values compared to neighboring time steps. This was supposed to have negative impact on the quality of compression. However, as can be seen in Figure \ref{fig:mechaxisym:NRMSD}, the quality is better than expected; e.g., if the rank of approximation matrix is set to 3 (compared to 232 being the rank of the original matrix) the normalized relative error (NRMSD) does not exceed $10^{-5}$.
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/mechaxisym_screenshot}
-\caption{"Mechaxisym" model. Results visualization (Displacement field, X component).}
+\caption{"Mechaxisym" model. Results visualization (displacement field, x component).}
 \label{fig:mechaxisym:mesh}
 \end{figure}
 

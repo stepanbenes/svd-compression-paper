@@ -5,28 +5,27 @@
 % TODO: Describe how to calculate decomposition of arbitrary matrix with example
 % TODO: add more citations separated by comma
 
-Singular value decomposition (SVD) \cite{Baker2013, Kalman2002} is based on a theorem from linear algebra which says that a rectangular matrix $\mtrx{A}$ can
-be broken down into the product of three matrices - an orthogonal matrix $\mtrx{U}$, a diagonal
-matrix $\mtrx{S}$, and the transpose of an orthogonal matrix $\mtrx{V}$:
+Singular value decomposition (SVD) \cite{Baker2013, Kalman2002} is based on a theorem from linear algebra which says that a rectangular matrix $\mtrx{A} \in \mathbb{R}^{m \times n}$ can be decomposed into the product of three matrices - an orthogonal matrix $\mtrx{U} \in \mathbb{R}^{m \times m}$, a diagonal
+matrix $\mtrx{S} \in \mathbb{R}^{m \times n}$, and the transpose of an orthogonal matrix $\mtrx{V} \in \mathbb{R}^{n \times n}$:
 
 \begin{equation}
-\mtrx{A_{m \times n}} = \mtrx{U_{m \times m}} \mtrx{S_{m \times n}} \mtrx{V^{T}_{n \times n}},
+\mtrx{A} = \mtrx{U} \mtrx{S} \mtrx{V}^\mathsf{T},
 \label{eq:svd-def}
 \end{equation}
 
-where $\mtrx{U^{T}U} = \mtrx{I}$, $\mtrx{V^{T}V} = \mtrx{I}$; the columns of $\mtrx{U}$ are orthonormal eigenvectors of $\mtrx{AA^{T}}$ , the
-columns of $\mtrx{V}$ are orthonormal eigenvectors of $\mtrx{A^{T}A}$, and $\mtrx{S}$ (sometimes referred to as $\mtrx{\Sigma}$) is a diagonal matrix containing singular values in descending order which are at the same time the square roots of eigenvalues from $\mtrx{U}$ or $\mtrx{V}$.
+\noindent
+where $\mtrx{U^\mathsf{T}U} = \mtrx{I}$, $\mtrx{V^\mathsf{T}V} = \mtrx{I}$; the columns of $\mtrx{U}$ are orthonormal eigenvectors of $\mtrx{AA^\mathsf{T}}$, the columns of $\mtrx{V}$ are orthonormal eigenvectors of $\mtrx{A^\mathsf{T}A}$, and $\mtrx{S}$ (sometimes referred to as $\mtrx{\Sigma}$) is a diagonal matrix containing singular values in descending order which are at the same time the square roots of eigenvalues of $\mtrx{U}$ or $\mtrx{V}$.
 
 SVD can be seen as a method for transforming correlated variables into a set of uncorrelated ones that better expose the various relationships among the original data items. At the same time, SVD is a method for identifying and ordering the dimensions along which data points exhibit the most variation. Once we have identified where the most variation is, it is possible to find the best approximation of the original data points using fewer dimensions. Hence, SVD can be seen as a method for data reduction/compression.
 
-This is the basic idea behind SVD: taking a high dimensional, highly variable set of data points and reducing it to a lower dimensional space that exposes the substructure of the original data more clearly and orders it from most variation to the least. What makes SVD practical for data compression applications is that you can simply ignore variation below a particular threshold to massively reduce your data but be assured that the main relationships of interest have been preserved.
+This is the basic idea behind SVD: taking a high dimensional, highly variable set of data points and reducing it to a lower dimensional space that exposes the substructure of the original data more clearly and orders it from most variation to the least. What makes SVD practical for data compression applications is that variation below a particular threshold can be simply ignored to massively reduce data with assurance that the main relationships of interest have been preserved.
 
 \subsection{Error estimation}
 \label{sec:error}
 
 % TODO: Singular values and norms of matrix
 
-The objective of data compression is to represent an input with lesser amount of data. However, the data reconstructed from its compressed representation may or may not be able to recreate the exact copy of original image. A compression technique can be lossy or lossless based on the quality of data it restores.
+The objective of data compression is to represent an input with smaller amount of data. However, the data reconstructed from its compressed representation may or may not be the exact copy of the original image. A compression technique can be lossy or lossless based on the quality of data it restores.
 
 Low-rank approximation matrix method that is described in this paper is a lossless compression technique. Several error metrics are used to control the quality of results \cite{SairaBanu2015}.
 
@@ -37,6 +36,7 @@ MSE=\frac{1}{m n} \sum_{i=1}^{m} \sum_{j=1}^{n} (A_{ij} - A'_{ij})^{2},
 \label{eq:mse-def}
 \end{equation}
 
+\noindent
 where $A_{ij}$ represents an element of the original matrix and $A'_{ij}$ represents an element of the
 reconstructed matrix of dimension $m \times n$.
 
@@ -52,6 +52,7 @@ NRMSD=\frac{RMSD}{X_{max}-X_{min}}=\frac{\sqrt{MSE}}{X_{max}-X_{min}},
 \label{eq:nrmsd-def}
 \end{equation}
 
+\noindent
 where $X_{min}$ and $X_{max}$ are elements of input matrix $\mtrx{A}$ with minimum and maximum value, respectively.
 
 \item \textbf{Peak signal to noise ratio}
@@ -76,7 +77,7 @@ PSNR=-20\log_{10}NRMSD
 \subsection{Randomized SVD}
 In \cite{Holmes, Halko2011, Candes2009} are described randomized algorithms for constructing approximate matrix factorizations. Their main purpose is to accelerate calculations of matrix decompositions which tend to be very slow for large data sets.
 
-Exact SVD of a $m \times n$ matrix has time complexity $O(min(mn^2, m^2n))$ using the "big-O" notation. Assume the data points are in the columns of $\mtrx{A} \in \mtrx{M_{m,n}}(\mathbb{R})$ where $m \leq n$. Note that $\mtrx{AA^T}$ is the dataset covariance matrix. Then a simple method is to randomly choose $k<m$ columns of $\mtrx{A}$ that form a matrix $\mtrx{B}$. Statistically, the SVD of $\mtrx{BB^T}$ will be close to that of $\mtrx{AA^T}$; thus it suffices to calculate the SVD of $\mtrx{B}$, the complexity of which, is only $O(k^2m)$.
+Exact SVD of a $m \times n$ matrix has time complexity $O(min(mn^2, m^2n))$ using the "big-O" notation. Assume the data points are in the columns of $\mtrx{A}$ where $m \leq n$. Note that $\mtrx{AA^\mathsf{T}}$ is the dataset covariance matrix. Then a simple method is to randomly choose $k<m$ columns of $\mtrx{A}$ that form a matrix $\mtrx{B}$. Statistically, the SVD of $\mtrx{BB^\mathsf{T}}$ will be close to that of $\mtrx{AA^\mathsf{T}}$; thus it suffices to calculate the SVD of $\mtrx{B}$, the complexity of which, is only $O(k^2m)$.
 
 % http://mathoverflow.net/questions/161252/what-is-the-time-complexity-of-truncated-svd
 
