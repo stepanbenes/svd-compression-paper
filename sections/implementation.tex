@@ -17,25 +17,35 @@ Each row of matrix $\mtrx{A}$ corresponds to single time step and each column co
 
 From the definition of SVD in (\ref{eq:svd-def}) and from the properties of SVD presented in section \ref{sec:math} follows the fact that a matrix can be represented in the form of its SVD components as a sum of rank-1 matrices in the form
 
+%\begin{equation}
+%\mtrx{A}=\mtrx{U_{1}}S_{1}\mtrx{V_{1}^{T}}+\mtrx{U_{2}}S_{2}\mtrx{V_{2}^{T}}+ ... +\mtrx{U_{n}}S_{n}\mtrx{V_{n}^{T}},
+%\label{eq:svd-expansion}
+%\end{equation}
+
 \begin{equation}
-\mtrx{A}=\mtrx{U_{1}}S_{1}\mtrx{V_{1}^{T}}+\mtrx{U_{2}}S_{2}\mtrx{V_{2}^{T}}+ ... +\mtrx{U_{n}}S_{n}\mtrx{V_{n}^{T}},
+\mtrx{A}=\sum_{i=1}^{n} \mtrx{U_{i}}S_{i}\mtrx{V_{i}^{\mathsf{T}}},
 \label{eq:svd-expansion}
 \end{equation}
 
 \noindent
 where $S_{i}$ is $i$-th singular value, $\mtrx{U_{i}}$ and $\mtrx{V_{i}}$ are corresponding singular vectors, and $n$ is the rank of matrix~$\mtrx{A}$. Considering the fact that singular values are ordered $S_{1} \geq S_{2} \geq S_{3} \geq ... \geq S_{n}$ the above formula implies that the first term would have the highest contribution and last term would have the lowest contribution to matrix~$\mtrx{A}$. Therefore, if we take only first $r$ members of the above summation we get an approximation matrix
 
+%\begin{equation}
+%\mtrx{A'}=\mtrx{U_{1}}S_{1}\mtrx{V_{1}^{T}}+\mtrx{U_{2}}S_{2}\mtrx{V_{2}^{T}}+ ... +\mtrx{U_{r}}S_{r}\mtrx{V_{r}^{T}}.
+%\label{eq:svd-approx-expansion}
+%\end{equation}
+
 \begin{equation}
-\mtrx{A'}=\mtrx{U_{1}}S_{1}\mtrx{V_{1}^{T}}+\mtrx{U_{2}}S_{2}\mtrx{V_{2}^{T}}+ ... +\mtrx{U_{r}}S_{r}\mtrx{V_{r}^{T}}.
+\mtrx{A'}=\sum_{i=1}^{r} \mtrx{U_{i}}S_{i}\mtrx{V_{i}^{\mathsf{T}}}.
 \label{eq:svd-approx-expansion}
 \end{equation}
 
 The quality of approximation depends on the magnitude of the singular values omitted from the approximation formula, namely $S_{r+1} ...  S_{n}$. The compression algorithm is based on assumption that the first singular value is order-of-magnitude higher than singular values at the end of the decomposition sequence. In special cases, when $r=n$, or $S_{i}=0$ for all $i \geq r$ the omitted singular values do not contribute to the sum and the compression is therefore lossless. In other cases, approximation error has to be calculated and taken into account to avoid loss of important details in data.
 
-The main goal of the compression algorithm is to find a compromise between low approximation error and high compression ratio $CR$ which is calculated using the formula
+The main goal of the compression algorithm is to find a compromise between low approximation error and high compression ratio $c$ which is calculated using the formula
 
 \begin{equation}
-CR=\frac{r(m+n+1)}{m n},
+c=\frac{r(m+n+1)}{m n},
 \label{eq:cr-def}
 \end{equation}
 
@@ -44,7 +54,7 @@ where $m$ and $n$ are dimensions of matrix $\mtrx{A}$. Explanation of the compre
 
 \begin{figure}[H]
 \centering\includegraphics[width=0.7\textwidth]{figures/low_rank_decomposition_diagram}
-\caption{Decomposition of input matrix $\mtrx{A}$ into diagonal matrix of singular values $\mtrx{\Sigma}$ and matrices of left and right singular vectors. Light color illustrates low-rank approximation.}
+\caption{Decomposition of input matrix $\mtrx{A}$ into diagonal matrix of singular values $\mtrx{S}$ and matrices of left and right singular vectors. Light color illustrates low-rank approximation.}
 \label{fig:lowrank_svd}
 \end{figure}
 
@@ -62,11 +72,11 @@ Once the SVD decomposition is calculated the compression algorithm removes a cer
 If the focus is only on the size of compressed data, the rank $r$ of the approximation matrix can be calculated by the formula
 
 \begin{equation}
-r=\ceil*{CR \times \frac{m n}{m+n+1}},
+r=\ceil*{c \times \frac{m n}{m+n+1}},
 \end{equation}
 
 \noindent
-where $CR$ is the compression ratio, $0 \leq CR \leq 1$ ($0$ results in absolute compression while $1$ results in no compression).
+where $c$ is the compression ratio, $0 \leq c \leq 1$ ($0$ results in absolute compression while $1$ results in no compression); $\ceil*{.}$ is the ceiling function.
 
 \paragraph{Approximation error}
 In the usual case the most important parameter to take into account is the approximation error. Algorithm is trying to minimize the compression ratio while at the same time ensuring that predefined limit of approximation error is not exceeded. To quantify the error the Mean squared error ($MSE$) metric is used. To be able to compare different data-sets having different scales the normalized version of $MSE$ is used - Normalized root-mean-square deviation ($NRMSD$). Both metrics are defined in section \ref{sec:error}.
