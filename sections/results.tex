@@ -1,6 +1,20 @@
 \section{Results}
 \label{sec:results}
 
+Figures \ref{fig:ExeTime_rows} and \ref{fig:ExeTime_columns} show results from the benchmarks that are meant to test theoretical algorithmic complexity of the compression algorithm and its dependence on the size of input matrix. Outcomes are discussed in section Optimization.
+
+\begin{figure}[H]
+\centering\includegraphics[width=\textwidth]{figures/executionTime_varyingRows}
+\caption{Dependency of SVD execution time on number of rows of an input matrix.}
+\label{fig:ExeTime_rows}
+\end{figure}
+
+\begin{figure}[H]
+\centering\includegraphics[width=\textwidth]{figures/executionTime_varyingColumns}
+\caption{Dependency of SVD execution time on number of columns of an input matrix.}
+\label{fig:ExeTime_columns}
+\end{figure}
+
 % temelin
 In Figure \ref{fig:temelin:mesh}, Figure \ref{fig:chotkova:mesh}, and Figure \ref{fig:mechaxisym:mesh} are depicted visualizations of results of analyses that were used as benchmarks for the compression algorithm. Analyses with distinct character of results were chosen intentionally to cover most cases that can occur in FEM calculations.
 
@@ -76,18 +90,4 @@ Besides the error also the execution speed of compression algorithm was measured
 \centering\includegraphics[width=\textwidth]{figures/temelin_ExecutionTime}
 \caption{Variation of execution time of standard and randomized decompositions calculated for Temelin project results.}
 \label{fig:temelin:ExeTime}
-\end{figure}
-
-Figures \ref{fig:ExeTime_rows} and \ref{fig:ExeTime_columns} show results from the benchmarks that are meant to test theoretical algorithmic complexity of the compression algorithm and its dependence on the size of input matrix. Outcomes are discussed in section Optimization.
-
-\begin{figure}[H]
-\centering\includegraphics[width=\textwidth]{figures/executionTime_varyingRows}
-\caption{Dependency of SVD execution time on number of rows of an input matrix.}
-\label{fig:ExeTime_rows}
-\end{figure}
-
-\begin{figure}[H]
-\centering\includegraphics[width=\textwidth]{figures/executionTime_varyingColumns}
-\caption{Dependency of SVD execution time on number of columns of an input matrix.}
-\label{fig:ExeTime_columns}
 \end{figure}
