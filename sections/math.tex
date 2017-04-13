@@ -5,7 +5,7 @@
 % TODO: Describe how to calculate decomposition of arbitrary matrix with example
 % TODO: add more citations separated by comma
 
-Singular value decomposition (SVD) \cite{Baker2013, Kalman2002} is based on a theorem from linear algebra which says that a rectangular matrix $\mtrx{A} \in \mathbb{R}^{m \times n}$ can be decomposed into the product of three matrices - an orthogonal matrix $\mtrx{U} \in \mathbb{R}^{m \times m}$, a diagonal
+Singular value decomposition (SVD) \cite{Baker2005, Kalman1996} is based on a theorem from linear algebra which says that a rectangular matrix $\mtrx{A} \in \mathbb{R}^{m \times n}$ can be decomposed into the product of three matrices - an orthogonal matrix $\mtrx{U} \in \mathbb{R}^{m \times m}$, a diagonal
 matrix $\mtrx{S} \in \mathbb{R}^{m \times n}$, and the transpose of an orthogonal matrix $\mtrx{V} \in \mathbb{R}^{n \times n}$:
 
 \begin{equation}
@@ -75,11 +75,11 @@ PSNR=-20\log_{10}NRMSD
 \end{itemize}
 
 \subsection{Randomized SVD}
-In \cite{Holmes, Halko2011, Candes2009} are described randomized algorithms for constructing approximate matrix factorizations. Their main purpose is to accelerate calculations of matrix decompositions which tend to be very slow for large data sets.
+In \cite{Holmes2007, Halko2011, Candes2011, Woolfe2008, Martinsson2011} are described randomized algorithms for constructing approximate matrix factorizations. Their main purpose is to accelerate calculations of matrix decompositions which tend to be very slow for large data sets.
 
+% TODO: tenhle odstavec vyhodit
 Exact SVD of a $m \times n$ matrix has time complexity $O(min(mn^2, m^2n))$ using the "big-O" notation. Assume the data points are in the columns of $\mtrx{A}$ where $m \leq n$. Note that $\mtrx{AA^\mathsf{T}}$ is the dataset covariance matrix. Then a simple method is to randomly choose $k<m$ columns of $\mtrx{A}$ that form a matrix $\mtrx{B}$. Statistically, the SVD of $\mtrx{BB^\mathsf{T}}$ will be close to that of $\mtrx{AA^\mathsf{T}}$; thus it suffices to calculate the SVD of $\mtrx{B}$, the complexity of which, is only $O(k^2m)$.
-
-% http://mathoverflow.net/questions/161252/what-is-the-time-complexity-of-truncated-svd
+% see: http://mathoverflow.net/questions/161252/what-is-the-time-complexity-of-truncated-svd
 
 
 % subsection: Sparse matrix of details: Mozna uplne vyhodit, stejne to neni implementovano -- uvest jen v sekci Optimization nebo v Conclusion
