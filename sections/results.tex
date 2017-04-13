@@ -71,7 +71,7 @@ Figure \ref{fig:mechaxisym:mesh} contains visualization of results of two-dimens
 % PSNR
 Figure \ref{fig:PSNR} summarizes the compression error for all three benchmarks using logarithmic scale to make the differences more visible. Peek signal to noise ratio (PSNR) metric is used (see Equation \ref{eq:psnr-def} for definition). Figure \ref{fig:PSNR_rand} contains the same comparison for the randomized SVD algorithm.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/PSNR}
 \caption{Comparison of Peek signal to noise ratio value calculated for different decompositions.}
 \label{fig:PSNR}
@@ -88,6 +88,22 @@ Besides the error also the execution speed of compression algorithm was measured
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/temelin_ExecutionTime}
-\caption{Variation of execution time of standard and randomized decompositions calculated for Temelin project results.}
+\caption{Variation of execution time of standard and randomized decompositions calculated for Temelin analysis results.}
 \label{fig:temelin:ExeTime}
 \end{figure}
+
+The memory consumption of compressed results for Temelin analysis is summarized in Table \ref{tab:mem-consum}. For different values of compression ratio shows memory size in megabytes. Compression ratio $c$ is an input parameter to the compression algorithm specifying amount of singular values ought to be removed from the SVD decomposition as follows from the equation (\ref{eq:rank-from-comp-ratio}). Size factor describes the final outcome of compression when compared to the original size.
+
+\begin{table}[H]
+\centering
+    \begin{tabular}{| r | r | r |}
+    \hline
+    compression ratio ($c$) & memory consumption [MB] & size factor \\ \hline \hline
+    1.00 & 2002.1 & 1 \\ \hline
+    0.50 & 1006.9 & 0.5002 \\ \hline
+    0.10& 211.9 & 0.1053 \\ \hline
+    0.01 & 35.3 & 0.0176 \\ \hline
+    \end{tabular}
+    \caption{Memory consumption of compressed results. Temelin analysis.}
+	\label{tab:mem-consum}
+\end{table}
