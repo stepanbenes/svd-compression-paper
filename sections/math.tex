@@ -1,9 +1,8 @@
 \section{Mathematical background}
 \label{sec:math}
 
-% TODO: Singular Value Decomposition in general
+% Singular Value Decomposition in general
 % TODO: Describe how to calculate decomposition of arbitrary matrix with example
-% TODO: add more citations separated by comma
 
 Singular value decomposition (SVD) \cite{Baker2005, Kalman1996, Golub1996} is based on a theorem from linear algebra which says that a rectangular matrix $\mtrx{A} \in \mathbb{R}^{m \times n}$ can be decomposed into the product of three matrices - an orthogonal matrix $\mtrx{U} \in \mathbb{R}^{m \times m}$, a diagonal
 matrix $\mtrx{S} \in \mathbb{R}^{m \times n}$, and the transpose of an orthogonal matrix $\mtrx{V} \in \mathbb{R}^{n \times n}$:
@@ -20,10 +19,10 @@ SVD can be seen as a method for transforming correlated variables into a set of 
 
 This is the basic idea behind SVD: taking a high dimensional, highly variable set of data points and reducing it to a lower dimensional space that exposes the substructure of the original data more clearly and orders it from most variation to the least. What makes SVD practical for data compression applications is that variation below a particular threshold can be simply ignored to massively reduce data with assurance that the main relationships of interest have been preserved.
 
+Exact SVD of a $m \times n$ matrix has time complexity $O(min(mn^2, m^2n))$ using the "big-O" notation. In \cite{Holmes2007, Candes2011, Woolfe2008, Martinsson2011} are described randomized algorithms for constructing approximate matrix factorizations that have better asymptotic complexity. Their main purpose is to accelerate calculations of matrix decompositions which tend to be very slow for large data sets.
+
 \subsection{Error estimation}
 \label{sec:error}
-
-% TODO: Singular values and norms of matrix
 
 The objective of data compression is to represent an input with smaller amount of data. However, the data reconstructed from its compressed representation may or may not be the exact copy of the original image. A compression technique can be lossy or lossless based on the quality of data it restores.
 
@@ -73,15 +72,5 @@ PSNR=-20\log_{10}NRMSD
 \end{equation}
 
 \end{itemize}
-
-\subsection{Randomized SVD}
-In \cite{Holmes2007, Candes2011, Woolfe2008, Martinsson2011} are described randomized algorithms for constructing approximate matrix factorizations. Their main purpose is to accelerate calculations of matrix decompositions which tend to be very slow for large data sets.
-
-% TODO: add citation with description of algorithm: \cite{Halko2011}
-
-% TODO: tenhle odstavec vyhodit
-Exact SVD of a $m \times n$ matrix has time complexity $O(min(mn^2, m^2n))$ using the "big-O" notation. Assume the data points are in the columns of $\mtrx{A}$ where $m \leq n$. Note that $\mtrx{AA^\mathsf{T}}$ is the dataset covariance matrix. Then a simple method is to randomly choose $k<m$ columns of $\mtrx{A}$ that form a matrix $\mtrx{B}$. Statistically, the SVD of $\mtrx{BB^\mathsf{T}}$ will be close to that of $\mtrx{AA^\mathsf{T}}$; thus it suffices to calculate the SVD of $\mtrx{B}$, the complexity of which, is only $O(k^2m)$.
-% see: http://mathoverflow.net/questions/161252/what-is-the-time-complexity-of-truncated-svd
-
 
 % subsection: Sparse matrix of details: Mozna uplne vyhodit, stejne to neni implementovano -- uvest jen v sekci Optimization nebo v Conclusion
