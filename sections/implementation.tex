@@ -1,62 +1,9 @@
 \section{Implementation}
 \label{sec:implementation}
 
-The objective of a compression algorithm is to reduce amount of data representing FEM results and also the ability to reconstruct original data from its smaller representation. This saves storage capacity and also accelerates data transfer between computers as the analysis itself and the post-processing of results is usually done on different work stations.
-
-Compression method can be lossy or lossless based on quality of data reconstructed from its compressed representation. Lossless methods are able to fully reconstruct original data. Lossy methods on the other hand produce only approximations of original data. 
-
-SVD is used as part of the compression algorithm. SVD method applied to arbitrary matrix produces decomposition that consist of corresponding singular values and singular vectors. This process is fully reversible (with the assumption that the numerical errors are negligible). The original matrix can be reconstructed by the multiplication of decomposed parts. However, the compression algorithm is based on modification of decomposition to create low-rank approximation matrix. The reconstructed matrix slightly differs from the original matrix and algorithm therefore does lossy compression.
-
 SVD decomposition is applied on matrices. The first thing to do is therefore to assemble an input matrix. Results from the Finite element method are discrete values calculated in nodes or integration points. There are usually multiple fields in result data (e.g. displacements, stress, strain etc.) and each field can have multiple components (e.g. displacements can have $X$, $Y$ and $Z$ component). As non-linear analyses usually lead to multiple computation steps there are multiple sets of data per each field component. All data corresponding to a single field component form the input matrix $\mtrx{A}$ to the compression algorithm. Only single field component is considered to fill the input matrix $\mtrx{A}$. Results for different data components (even for the same field) can be independent from each other. There can also be order-of-magnitude difference between the components and the compression algorithm could potentially clear the important information in the weaker component. Another reason against merging of components is computational complexity. The smaller the matrix $\mtrx{A}$ is the faster the decomposition algorithm performs.
 
 Each row of matrix $\mtrx{A}$ corresponds to single time step and each column corresponds to a single node or integration point. Once the matrix $\mtrx{A}$ is built for a field component the compression algorithm can be applied on it. It is purely algebraic procedure, no information about geometry of the mesh is needed. 
-
-% The compression algorithm is based on low-rank approximation matrix created from SVD decomposition. Results for time steps are not independent. They usually have some relation between them. List of singular values produced by the SVD method reveals the dependency between the singular vectors that form the orthogonal base of the matrix $\mtrx{A}$.
-
-\subsection{Low-rank approximation matrix}
-
-From the definition of SVD in (\ref{eq:svd-def}) and from the properties of SVD presented in section \ref{sec:math} follows the fact that a matrix can be represented in the form of its SVD components as a sum of rank-1 matrices
-
-%\begin{equation}
-%\mtrx{A}=\mtrx{U_{1}}S_{1}\mtrx{V_{1}^{T}}+\mtrx{U_{2}}S_{2}\mtrx{V_{2}^{T}}+ ... +\mtrx{U_{n}}S_{n}\mtrx{V_{n}^{T}},
-%\label{eq:svd-expansion}
-%\end{equation}
-
-\begin{equation}
-\mtrx{A}=\sum_{i=1}^{n} \mtrx{U_{i}}S_{i}\mtrx{V_{i}^{\mathsf{T}}},
-\label{eq:svd-expansion}
-\end{equation}
-
-\noindent
-where $S_{i}$ is the $i$-th singular value, $\mtrx{U_{i}}$ and $\mtrx{V_{i}}$ are corresponding singular vectors, and $n$ is the rank of matrix~$\mtrx{A}$. Considering the fact that singular values are ordered $S_{1} \geq S_{2} \geq S_{3} \geq ... \geq S_{n}$, the above formula implies that the first term of the sum would have the highest contribution and the last term would have the lowest contribution to matrix~$\mtrx{A}$. Therefore, if we take only first $r$ members of the above summation we get an approximation matrix
-
-%\begin{equation}
-%\mtrx{A'}=\mtrx{U_{1}}S_{1}\mtrx{V_{1}^{T}}+\mtrx{U_{2}}S_{2}\mtrx{V_{2}^{T}}+ ... +\mtrx{U_{r}}S_{r}\mtrx{V_{r}^{T}}.
-%\label{eq:svd-approx-expansion}
-%\end{equation}
-
-\begin{equation}
-\mtrx{A'}=\sum_{i=1}^{r} \mtrx{U_{i}}S_{i}\mtrx{V_{i}^{\mathsf{T}}}.
-\label{eq:svd-approx-expansion}
-\end{equation}
-
-The quality of approximation depends on the magnitude of the singular values omitted from the approximation formula, namely $S_{r+1} ...  S_{n}$. The compression algorithm is based on an assumption that the first singular value is order-of-magnitude higher than singular values at the end of the decomposition sequence. In special cases, when $r=n$ or $S_{i}=0$ for all $i \geq r$, the omitted singular values do not contribute to the sum and the compression is therefore lossless. In other cases, approximation error has to be calculated and taken into account to avoid loss of important details in data.
-
-The main goal of the compression algorithm is to find a compromise between low approximation error and high compression ratio $c$ which is calculated using the formula
-
-\begin{equation}
-c=\frac{r(m+n+1)}{m n},
-\label{eq:cr-def}
-\end{equation}
-
-\noindent
-where $m$ and $n$ are dimensions of matrix $\mtrx{A}$. Explanation of the compression ratio formula is best done using Figure~\ref{fig:lowrank_svd}. Light color represents the part of matrix decomposition that is to be stored in the output file as a low-rank approximation of the input.
-
-\begin{figure}[H]
-\centering\includegraphics[width=0.7\textwidth]{figures/low_rank_decomposition_diagram}
-\caption{Decomposition of input matrix $\mtrx{A}$ into diagonal matrix of singular values $\mtrx{S}$ and matrices of left and right singular vectors. Light color illustrates low-rank approximation.}
-\label{fig:lowrank_svd}
-\end{figure}
 
 Let us assume that the matrix is not empty and is full rank. Then from the formula (\ref{eq:cr-def}) follows that if $r$ equals to the rank of matrix $\mtrx{A}$ the compression ratio is always higher than one. In other words the memory consumption of stored decomposition is bigger than the size of the original matrix. To make the compression algorithm applicable the parameter $r$ must conform to the condition
 
