@@ -1,7 +1,9 @@
 \section{Results}
 \label{sec:results}
 
-Figures \ref{fig:ExeTime_rows} and \ref{fig:ExeTime_columns} show results from the benchmarks that examine algorithmic complexity of the compression algorithm and its dependence on the size of the input matrix. Outcomes are discussed in section Optimization.
+The number of operations in the compression algorithm with respect to the number of stored incremental or time steps (the number of rows in the matrix $\mtrx{A}$) is depicted in Figure \ref{fig:ExeTime_rows} while the number of operations with respect to the number of points, where the results are stored (the number of columns of the matrix $\mtrx{A}$), is depicted in Figure \ref{fig:ExeTime_columns}. Especially on Figure \ref{fig:ExeTime_columns} is clearly visible that the randomized SVD algorithm is much faster than the classical one.
+
+% MELA BY ZDE BYT DISKUZE, PROC PRI ROSTOUCIM POCTU RADKU SE NELINEARNE ZVYSUJE POCET OPRACI, ALE PRO ROSTOUCI POCET SLOUPCU SE POCET OPERACI ZVETSUJE LINEARNE.
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/executionTime_varyingRows}
@@ -15,56 +17,54 @@ Figures \ref{fig:ExeTime_rows} and \ref{fig:ExeTime_columns} show results from t
 \label{fig:ExeTime_columns}
 \end{figure}
 
-% temelin
-In Figure \ref{fig:temelin:mesh}, Figure \ref{fig:chotkova:mesh}, and Figure \ref{fig:mechaxisym:mesh} are depicted visualizations of results of analyses that were used as benchmarks for the compression algorithm. Analyses with distinct character of results were chosen intentionally to cover most cases that can occur in FEM calculations.
-
-Figure \ref{fig:temelin:mesh} shows results from an analysis of aging of nuclear power-plant's containment. This analysis includes high number of analysis steps (thousands) with very little differences between them. There is therefore potential for compression ratio to be very high as proven in Figure \ref{fig:temelin:NRMSD} that examines the impact of changes in the compression ratio to the mean error of approximation.
+% reactor containment
+Behavior of the compression strategy introduced is presented on three real world examples. First example is an analysis of aging of nuclear power plant's containment made from prestressed concrete. Finite element mesh used in this analysis is in Figure \ref{fig:temelin:mesh}. More details about the analysis can be found in references \cite{Kruis2012} and \cite{Koudelka2009}. This analysis includes high number of analysis time steps (thousands) with very little differences between them. There is therefore potential for compression ratio to be very high as proven in Figure \ref{fig:temelin:NRMSD} that examines the impact of changes in the compression ratio to the mean error of approximation.
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/temelin_screenshot}
-\caption{Temelin nuclear power plant. Results visualization (Displacement field, X component).}
+\caption{Segment of containment analyzed. Results visualization (displacement field, x component).}
 \label{fig:temelin:mesh}
 \end{figure}
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/temelin_NRMSD}
-\caption{Dependence of Normalized Rooted Mean Squared Deviation on Compression ratio for Temelin project results.}
+\caption{Dependence of Normalized Rooted Mean Squared Deviation on Compression ratio for reactor containment analysis results.}
 \label{fig:temelin:NRMSD}
 \end{figure}
 
-% chotkova
-Figure \ref{fig:chotkova:mesh} shows results from an analysis of geological layers. This project was chosen mainly to study behavior of compression algorithm when dealing with high discontinuities in data in spatial dimension (as can be seen in visualization). As summarized in Figure \ref{fig:chotkova:NRMSD} and Figure \ref{fig:chotkova:MaxError} this has negligible effect on quality of compression.
+% geological layers
+Figure \ref{fig:chotkova:mesh}  shows results from an analysis of geological layers which was based on theory plasticity. More details can be found in reference \cite{Koudelka2006}. This project was chosen mainly to study behavior of compression algorithm when dealing with high discontinuities in data in spatial dimension (as can be seen in visualization). As summarized in Figure \ref{fig:chotkova:NRMSD} and Figure \ref{fig:chotkova:MaxError} this has negligible effect on quality of compression.
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/chotkova_screenshot}
-\caption{Chotkova geological layers. Results visualization (Stress field, sigma XX component).}
+\caption{Analysis of geological layers. Results visualization (stress field, sigma XX component).}
 \label{fig:chotkova:mesh}
 \end{figure}
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/chotkova_NRMSD}
-\caption{Dependence of Normalized Rooted Mean Squared Deviation on Compression ratio for Chotkova project results.}
+\caption{Dependence of Normalized Rooted Mean Squared Deviation on Compression ratio for results of geological layers project.}
 \label{fig:chotkova:NRMSD}
 \end{figure}
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/chotkova_MaxError}
-\caption{Dependence of Normalized Maximum Error on Compression ratio for Chotkova project results.}
+\caption{Dependence of Normalized Maximum Error on Compression ratio for results of geological layers project.}
 \label{fig:chotkova:MaxError}
 \end{figure}
 
-% mechaxisym
-Figure \ref{fig:mechaxisym:mesh} contains visualization of results of two-dimensional analysis. There are exactly 232 analysis steps. The resulting data has linear function character with several discontinuities in temporal dimension. There are few time steps in which resulting discrete functions have very different values compared to neighboring time steps. This was supposed to have negative impact on the quality of compression. However, as can be seen in Figure \ref{fig:mechaxisym:NRMSD}, the quality is better than expected; e.g., if the rank of approximation matrix is set to 3 (compared to 232 being the rank of the original matrix) the normalized relative error (NRMSD) does not exceed $10^{-5}$.
+% reactor vessel 2D
+Figure \ref{fig:mechaxisym:mesh} contains visualization of results of two-dimensional analysis, where axisymmetric description was used for analysis of aging of a reactor vessel. Details about the analysis can be found in reference \cite{Kruis2005}. There are exactly 232 analysis time steps. The resulting data has linear function character with several discontinuities in temporal dimension. There are few time steps in which resulting discrete functions have very different values compared to neighboring time steps. This was supposed to have negative impact on the quality of compression. However, as can be seen in Figure \ref{fig:mechaxisym:NRMSD}, the quality is better than expected; e.g., if the rank of approximation matrix is set to 3 (compared to 232 being the rank of the original matrix) the normalized relative error (NRMSD) does not exceed $10^{-5}$.
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/mechaxisym_screenshot}
-\caption{"Mechaxisym" model. Results visualization (displacement field, x component).}
+\caption{2D model of a reactor vessel. Results visualization (displacement field, x component).}
 \label{fig:mechaxisym:mesh}
 \end{figure}
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/mechaxisym_NRMSD}
-\caption{Dependence of Normalized Rooted Mean Squared Deviation on Compression ratio for Mechaxisym project results.}
+\caption{Dependence of Normalized Rooted Mean Squared Deviation on Compression ratio for reactor vessel analysis results.}
 \label{fig:mechaxisym:NRMSD}
 \end{figure}
 
@@ -88,11 +88,11 @@ Besides the error also the execution speed of compression algorithm was measured
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/temelin_ExecutionTime}
-\caption{Variation of execution time of standard and randomized decompositions calculated for Temelin analysis results.}
+\caption{Variation of execution time of standard and randomized decompositions calculated for reactor containment analysis results.}
 \label{fig:temelin:ExeTime}
 \end{figure}
 
-The memory consumption of compressed results for Temelin analysis is summarized in Table \ref{tab:mem-consum}. For different values of compression ratio shows memory size in megabytes. Compression ratio $c$ is an input parameter to the compression algorithm specifying amount of singular values ought to be removed from the SVD decomposition as follows from the equation (\ref{eq:rank-from-comp-ratio}). Size factor describes the final outcome of compression when compared to the original size.
+The memory consumption of compressed results for reactor containment analysis is summarized in Table \ref{tab:mem-consum}. For different values of compression ratio shows memory size in megabytes. Compression ratio $c$ is an input parameter to the compression algorithm specifying amount of singular values ought to be removed from the SVD decomposition as follows from the equation (\ref{eq:rank-from-comp-ratio}). Size factor describes the final outcome of compression when compared to the original size.
 
 \begin{table}[H]
 \centering
@@ -104,6 +104,6 @@ The memory consumption of compressed results for Temelin analysis is summarized 
     0.10& 211.9 & 0.1053 \\ \hline
     0.01 & 35.3 & 0.0176 \\ \hline
     \end{tabular}
-    \caption{Memory consumption of compressed results. Temelin analysis.}
+    \caption{Memory consumption of compressed results. 3D reactor containment analysis.}
 	\label{tab:mem-consum}
 \end{table}
