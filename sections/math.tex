@@ -19,11 +19,11 @@ SVD can be seen as a method for transforming correlated variables into a set of 
 
 This is the basic idea behind SVD: taking a high dimensional, highly variable set of data points and reducing it to a lower dimensional space that exposes the substructure of the original data more clearly and orders it from most variation to the least. What makes SVD practical for data compression applications is that variation below a particular threshold can be simply ignored to massively reduce data with assurance that the main relationships of interest have been preserved.
 
-The objective of a compression algorithm is to reduce amount of data representing FEM results and also the ability to reconstruct original data from its smaller representation. This saves storage capacity and also accelerates data transfer between computers as the analysis itself and the post-processing of results is usually done on different work stations.
+The objective of a compression algorithm is to reduce amount of data representing FEM results and also the ability to reconstruct original data from its smaller representation. This saves storage capacity and also accelerates data transfer between computers as the analysis itself and the post-processing of results is usually done on different workstations.
 
-Exact SVD of a $m \times n$ matrix has time complexity $O(min(mn^2, m^2n))$ using the "big-O" notation. In \cite{Holmes2007, Candes2011, Woolfe2008, Martinsson2011} are described randomized algorithms for constructing approximate matrix factorizations that have better asymptotic complexity. Their main purpose is to accelerate calculations of matrix decompositions which tend to be very slow for large data sets.
+Exact SVD of a $m \times n$ matrix has computational complexity $O(min(mn^2, m^2n))$ using the "big-O" notation. In \cite{Holmes2007, Candes2011, Woolfe2008, Martinsson2011} are described randomized algorithms for constructing approximate matrix factorizations that have better asymptotic complexity. Their main purpose is to accelerate calculations of matrix decompositions which tend to be very slow for large data sets.
 
-Compression method can be lossy or lossless based on quality of data reconstructed from its compressed representation. Lossless methods are able to fully reconstruct original data. Lossy methods on the other hand produce only approximations of original data. 
+Compression method can be lossy or lossless based on quality of data reconstructed from its compressed representation. Lossless methods are able to fully reconstruct original data. Lossy methods, on the other hand, produce only approximations of original data. 
 
 SVD is used as part of the compression algorithm. SVD method applied to arbitrary matrix produces decomposition that consist of corresponding singular values and singular vectors. This process is fully reversible (with the assumption that the numerical errors are negligible). The original matrix can be reconstructed by the multiplication of decomposed parts. However, the compression algorithm is based on modification of decomposition to create low-rank approximation matrix. The reconstructed matrix slightly differs from the original matrix and algorithm therefore does lossy compression.
 
@@ -37,12 +37,12 @@ From the definition of SVD in (\ref{eq:svd-def}) and from the properties of SVD 
 %\end{equation}
 
 \begin{equation}
-\mtrx{A}=\sum_{i=1}^{n} \mtrx{U_{i}}S_{i}\mtrx{V_{i}^{\mathsf{T}}},
+\mtrx{A}=\sum_{i=1}^{n} s_{i}\bf{u}_i\bf{v}_i^{\mathsf{T}},
 \label{eq:svd-expansion}
 \end{equation}
 
 \noindent
-where $S_{i}$ is the $i$-th singular value, $\mtrx{U_{i}}$ and $\mtrx{V_{i}}$ are corresponding singular vectors, and $n$ is the rank of matrix~$\mtrx{A}$. Considering the fact that singular values are ordered $S_{1} \geq S_{2} \geq S_{3} \geq ... \geq S_{n}$, the above formula implies that the first term of the sum would have the highest contribution and the last term would have the lowest contribution to matrix~$\mtrx{A}$. Therefore, if we take only first $r$ members of the above summation we get an approximation matrix
+where $s_i$ is the $i$-th singular value, $\bf{u}_i$ and $\bf{v}_i$ are corresponding singular vectors, and $n$ is the rank of matrix~$\mtrx{A}$. Considering the fact that singular values are ordered $s_{1} \geq s_{2} \geq s_{3} \geq ... \geq s_{n}$, the above formula implies that the first term of the sum would have the highest contribution and the last term would have the lowest contribution to matrix~$\mtrx{A}$. Therefore, if we take only first $r$ members of the above summation we get an approximation matrix
 
 %\begin{equation}
 %\mtrx{A'}=\mtrx{U_{1}}S_{1}\mtrx{V_{1}^{T}}+\mtrx{U_{2}}S_{2}\mtrx{V_{2}^{T}}+ ... +\mtrx{U_{r}}S_{r}\mtrx{V_{r}^{T}}.
@@ -50,11 +50,11 @@ where $S_{i}$ is the $i$-th singular value, $\mtrx{U_{i}}$ and $\mtrx{V_{i}}$ ar
 %\end{equation}
 
 \begin{equation}
-\mtrx{A'}=\sum_{i=1}^{r} \mtrx{U_{i}}S_{i}\mtrx{V_{i}^{\mathsf{T}}}.
+\mtrx{A'}=\sum_{i=1}^{r} s_{i}\bf{u}_i\bf{v}_i^{\mathsf{T}}.
 \label{eq:svd-approx-expansion}
 \end{equation}
 
-The quality of approximation depends on the magnitude of the singular values omitted from the approximation formula, namely $S_{r+1} ...  S_{n}$. The compression algorithm is based on an assumption that the first singular value is order-of-magnitude higher than singular values at the end of the decomposition sequence. In special cases, when $r=n$ or $S_{i}=0$ for all $i \geq r$, the omitted singular values do not contribute to the sum and the compression is therefore lossless. In other cases, approximation error has to be calculated and taken into account to avoid loss of important details in data.
+The quality of approximation depends on the magnitude of the singular values omitted from the approximation formula, namely $s_{r+1} ...  s_{n}$. The compression algorithm is based on an assumption that the first singular value is order-of-magnitude higher than singular values at the end of the decomposition sequence. In special cases, when $r=n$ or $s_{i}=0$ for all $i \geq r$, the omitted singular values do not contribute to the sum and the compression is therefore lossless. In other cases, approximation error has to be calculated and taken into account to avoid loss of important details in data.
 
 The main goal of the compression algorithm is to find a compromise between low approximation error and high compression ratio $c$ which is calculated using the formula
 
@@ -92,7 +92,7 @@ reconstructed matrix of dimension $m \times n$.
 
 \item \textbf{Rooted Mean Square Deviation}
 \begin{equation}
-RMSD=\sqrt{MSE}
+RMSD=\sqrt{MSE}.
 \label{eq:rmsd-def}
 \end{equation}
 
@@ -107,20 +107,16 @@ where $X_{min}$ and $X_{max}$ are elements of input matrix $\mtrx{A}$ with minim
 
 \item \textbf{Peak Signal to Noise Ratio}
 
-PSNR is most commonly used to measure the quality of reconstruction of lossy compression methods (e.g. image compression). The signal in this case is the original data, and the noise is the error introduced by compression. PSNR is an approximation to human perception of reconstruction quality. This metric is not so important in area of FEM analyses where the human perception of visualizations is not as important as the exact mathematical accuracy of approximations. The reason to include PSNR in results is in particular to allow comparison with other image-related compression methods. PSNR is usually expressed in terms of the logarithmic decibel scale (dB).
+PSNR is most commonly used to measure the quality of reconstruction of lossy compression methods (e.g. image compression). The signal in this case is the original data, and the noise is the error introduced by compression. PSNR is an approximation to human perception of reconstruction quality. This metric is not so important in area of FEM analyses, where the human perception of visualizations is not as important as the exact mathematical accuracy of approximations. The reason to include PSNR in results is in particular to allow comparison with other image-related compression methods. PSNR is usually expressed in terms of the logarithmic decibel scale (dB)
 
-\begin{equation}
-PSNR=10\log_{10}\frac{(X_{max}-X_{min})^{2}}{MSE}
-\end{equation}
-
-\begin{equation}
-PSNR=20\log_{10}\frac{X_{max}-X_{min}}{\sqrt{MSE}}=20\log_{10}\frac{1}{NRMSD}
-\end{equation}
-
-\begin{equation}
-PSNR=-20\log_{10}NRMSD
+\begin{eqnarray}
+PSNR &=& 10\log_{10}\frac{(X_{max}-X_{min})^{2}}{MSE} =
+\\
+&=& 20\log_{10}\frac{X_{max}-X_{min}}{\sqrt{MSE}}=20\log_{10}\frac{1}{NRMSD} = \nonumber
+\\
+&=& -20\log_{10}NRMSD. \nonumber
 \label{eq:psnr-def}
-\end{equation}
+\end{eqnarray}
 
 \end{itemize}
 
