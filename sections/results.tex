@@ -4,6 +4,7 @@
 The number of operations in the compression algorithm with respect to the number of stored incremental or time steps (the number of rows in the matrix $\mtrx{A}$) is depicted in Figure \ref{fig:ExeTime_rows} while the number of operations with respect to the number of points, where the results are stored (the number of columns of the matrix $\mtrx{A}$), is depicted in Figure \ref{fig:ExeTime_columns}. Especially on Figure \ref{fig:ExeTime_columns} is clearly visible that the randomized SVD algorithm is much faster than the classical one.
 
 % MELA BY ZDE BYT DISKUZE, PROC PRI ROSTOUCIM POCTU RADKU SE NELINEARNE ZVYSUJE POCET OPRACI, ALE PRO ROSTOUCI POCET SLOUPCU SE POCET OPERACI ZVETSUJE LINEARNE.
+% odpovida teoreticke vypocetni slozitosti $O(m^2n)$, where $m<n$. Vyplyva z pouziteho algoritmu JacobiSVD (viz zdrojak)...
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/executionTime_varyingRows}
@@ -18,7 +19,7 @@ The number of operations in the compression algorithm with respect to the number
 \end{figure}
 
 % reactor containment
-Behavior of the compression strategy introduced is presented on three real world examples. First example is an analysis of aging of nuclear power plant's containment made from prestressed concrete. Finite element mesh used in this analysis is in Figure \ref{fig:temelin:mesh}. More details about the analysis can be found in references \cite{Kruis2012} and \cite{Koudelka2009}. This analysis includes high number of analysis time steps (thousands) with very little differences between them. There is therefore potential for compression ratio to be very high as proven in Figure \ref{fig:temelin:NRMSD} that examines the impact of changes in the compression ratio to the mean error of approximation.
+Behavior of the compression strategy introduced is presented on three real world examples. First example is an analysis of aging of nuclear power plant's containment made from prestressed concrete. Finite element mesh used in this analysis is in Figure \ref{fig:temelin:mesh}. More details about the analysis can be found in \cite{Kruis2012} and \cite{Koudelka2009}. This analysis includes high number of analysis time steps (thousands) with very little differences between them. There is therefore potential for compression ratio to be very high as proven in Figure \ref{fig:temelin:NRMSD} that examines the impact of changes in the compression ratio to the mean error of approximation.
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/temelin_screenshot}
