@@ -69,7 +69,7 @@ Low-rank approximation matrix method that is described in this paper is a lossy 
 \begin{itemize}
 \item \textbf{Mean square error}
 \begin{equation}
-MSE=\frac{1}{m n} \sum_{i=1}^{m} \sum_{j=1}^{n} (A_{ij} - A'_{ij})^{2},
+\mathit{MSE}=\frac{1}{m n} \sum_{i=1}^{m} \sum_{j=1}^{n} (A_{ij} - A'_{ij})^{2},
 \label{eq:mse-def}
 \end{equation}
 
@@ -79,13 +79,13 @@ reconstructed matrix of dimension $m \times n$.
 
 \item \textbf{Rooted Mean Square Deviation}
 \begin{equation}
-RMSD=\sqrt{MSE}.
+\mathit{RMSD} = \sqrt{\mathit{MSE}}.
 \label{eq:rmsd-def}
 \end{equation}
 
 \item \textbf{Normalized Rooted Mean Square Deviation}
 \begin{equation}
-NRMSD=\frac{RMSD}{X_{max}-X_{min}}=\frac{\sqrt{MSE}}{X_{max}-X_{min}},
+\mathit{NRMSD} = \frac{\mathit{RMSD}}{X_{max}-X_{min}}=\frac{\sqrt{\mathit{MSE}}}{X_{max}-X_{min}},
 \label{eq:nrmsd-def}
 \end{equation}
 
@@ -94,14 +94,14 @@ where $X_{min}$ and $X_{max}$ are elements of input matrix $\mtrx{A}$ with minim
 
 \item \textbf{Peak Signal to Noise Ratio}
 
-PSNR is most commonly used to measure the quality of reconstruction of lossy compression methods (e.g. image compression). The signal in this case is the original data, and the noise is the error introduced by compression. PSNR is an approximation to human perception of reconstruction quality. This metric is not so important in area of FEM analyses, where the human perception of visualizations is not as important as the exact mathematical accuracy of approximations. The reason to include PSNR in results is in particular to allow comparison with other image-related compression methods. PSNR is usually expressed in terms of the logarithmic decibel scale (dB)
+$\mathit{PSNR}$ is most commonly used to measure the quality of reconstruction of lossy compression methods (e.g. image compression). The signal in this case is the original data, and the noise is the error introduced by compression. $\mathit{PSNR}$ is an approximation to human perception of reconstruction quality. This metric is not so important in area of FEM analyses, where the human perception of visualizations is not as important as the exact mathematical accuracy of approximations. The reason to include $\mathit{PSNR}$ in results is in particular to allow comparison with other image-related compression methods. $\mathit{PSNR}$ is usually expressed in terms of the logarithmic decibel scale (dB)
 
 \begin{eqnarray}
-PSNR &=& 10\log_{10}\frac{(X_{max}-X_{min})^{2}}{MSE} =
+\mathit{PSNR} &=& 10\log_{10}\frac{(X_{max}-X_{min})^{2}}{\mathit{MSE}} =
 \\
-&=& 20\log_{10}\frac{X_{max}-X_{min}}{\sqrt{MSE}}=20\log_{10}\frac{1}{NRMSD} = \nonumber
+&=& 20\log_{10}\frac{X_{max}-X_{min}}{\sqrt{\mathit{MSE}}}=20\log_{10}\frac{1}{\mathit{NRMSD}} = \nonumber
 \\
-&=& -20\log_{10}NRMSD. \nonumber
+&=& -20\log_{10}\mathit{NRMSD}. \nonumber
 \label{eq:psnr-def}
 \end{eqnarray}
 

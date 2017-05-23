@@ -30,7 +30,7 @@ r=\ceil*{c \times \frac{m n}{m+n+1}},
 where $c$ is the compression ratio, $0 \leq c \leq 1$ ($0$ results in absolute compression while $1$ results in no compression); $\ceil*{.}$ is the ceiling function.
 
 \paragraph{Approximation error}
-In the usual case the most important measure to take into account is the approximation error. Algorithm is trying to minimize the compression ratio while at the same time ensuring that predefined approximation error threshold is not exceeded. To quantify the error the Normalized root-mean-square deviation ($NRMSD$) is used. The normalized error metric enables to work with various data sets that have different scales. $NRMSD$ is defined in section \ref{sec:error}.
+In the usual case the most important measure to take into account is the approximation error. Algorithm is trying to minimize the compression ratio while at the same time ensuring that predefined approximation error threshold is not exceeded. To quantify the error the Normalized root-mean-square deviation ($\mathit{NRMSD}$) is used. The normalized error metric enables to work with various data sets that have different scales. $\mathit{NRMSD}$ is defined in section \ref{sec:error}.
 
 To effectively calculate the final rank of the approximation matrix from the desired approximation error the interesting property of singular values
 
@@ -51,11 +51,11 @@ Using formulas \eqref{eq:svd-expansion} and \eqref{eq:svd-approx-expansion} the 
 \end{equation}
 
 \noindent
-where the term on the right-hand side is the sum of squares of those singular values of the matrix $\mtrx{A}$ that are going to be cut away by the compression algorithm. The equation can be rewritten using the definition of $MSE$ in \eqref{eq:mse-def} to
+where the term on the right-hand side is the sum of squares of those singular values of the matrix $\mtrx{A}$ that are going to be cut away by the compression algorithm. The equation can be rewritten using the definition of $\mathit{MSE}$ in \eqref{eq:mse-def} to
 
 \begin{equation}
 %MSE \times m n = s_{r+1}^{2} + s_{r+2}^{2} + ... + s_{k-1}^{2} + s_{k}^2
-MSE \times m n = \sum_{i=r+1}^{k} s_{i}^{2}
+\mathit{MSE} \times m n = \sum_{i=r+1}^{k} s_{i}^{2}
 \end{equation}
 
 \noindent
@@ -63,17 +63,17 @@ and using \eqref{eq:nrmsd-def} further to
 
 \begin{equation}
 %(NRMSD \times (X_{max}-X_{min}))^{2} \times m n = s_{r+1}^{2} + s_{r+2}^{2} + ... + s_{k-1}^{2} + s_{k}^2.
-(NRMSD \times (X_{max}-X_{min}))^{2} \times m n = \sum_{i=r+1}^{k} s_{i}^{2}.
+(\mathit{NRMSD} \times (X_{max}-X_{min}))^{2} \times m n = \sum_{i=r+1}^{k} s_{i}^{2}.
 \end{equation}
 
-Then $NRMSD$ can be used as a quality metric for the compression algorithm because normalization makes it usable for different datasets. Calculation of rank of the approximation matrix is depicted as pseudo-code in Algorithm \ref{alg:rank-calculation}. Algorithm uses the following inequality to test whether the desired rank has been reached
+Then $\mathit{NRMSD}$ can be used as a quality metric for the compression algorithm because normalization makes it usable for different datasets. Calculation of rank of the approximation matrix is depicted as pseudo-code in Algorithm \ref{alg:rank-calculation}. Algorithm uses the following inequality to test whether the desired rank has been reached
 
 \begin{equation}
 e > \frac{\sqrt[]{\frac{\sum_{i=r+1}^{k} s_{i}^{2}}{m n}}}{X_{max}-X_{min}},
 \end{equation}
 
 \noindent
-where $e$ is $NRMSD$ used as an error limit that can not be exceeded to achieve reasonable quality of approximation.
+where $e$ is $\mathit{NRMSD}$ used as an error limit that can not be exceeded to achieve reasonable quality of approximation.
 
 \begin{algorithm}
   \caption{Calculation of rank for approximation matrix from maximum allowed error}\label{rankAlgorithm}
@@ -82,12 +82,12 @@ where $e$ is $NRMSD$ used as an error limit that can not be exceeded to achieve 
   	\INPUT maximum allowed error ($e$), array with singular values ($S$), element count ($c$), maximum element value ($x_{max}$), minimum element value ($x_{min}$)
     \OUTPUT rank of resulting matrix
     \Procedure{CalculateRank}{$e, S, c, x_{max}, x_{min}$}
-      \State $MSE \gets 0$
-      \State $NRMSD \gets 0$
+      \State $\mathit{MSE} \gets 0$
+      \State $\mathit{NRMSD} \gets 0$
       \State $rank \gets S.length$
-      \While{$NRMSD < e$}\Comment{repeat until max error is reached}
-        \State $MSE \gets MSE + S[rank]/c$ \Comment{calculate MSE for current rank}
-        \State $NRMSD \gets \sqrt{MSE} / (x_{max} - x_{min})$ \Comment{normalize error}
+      \While{$\mathit{NRMSD} < e$}\Comment{repeat until max error is reached}
+        \State $\mathit{MSE} \gets \mathit{MSE} + S[rank]/c$ \Comment{calculate $\mathit{MSE}$ for current rank}
+        \State $\mathit{NRMSD} \gets \sqrt{\mathit{MSE}} / (x_{max} - x_{min})$ \Comment{normalize error}
         \State $rank \gets rank - 1$ \Comment{decrement rank for next loop}
       \EndWhile
       \State \textbf{return} $rank + 1$ \Comment{Add one to not exceed maximum allowed error}
