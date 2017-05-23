@@ -66,14 +66,14 @@ and using \eqref{eq:nrmsd-def} further to
 (\mathit{NRMSD} \times (X_{max}-X_{min}))^{2} \times m n = \sum_{i=r+1}^{k} s_{i}^{2}.
 \end{equation}
 
-Then $\mathit{NRMSD}$ can be used as a quality metric for the compression algorithm because normalization makes it usable for different datasets. Calculation of rank of the approximation matrix is depicted as pseudo-code in Algorithm \ref{alg:rank-calculation}. Algorithm uses the following inequality to test whether the desired rank has been reached
+Then $\mathit{NRMSD}$ can be used as a quality metric for the compression algorithm because normalization makes it usable for different datasets. Calculation of rank of the approximation matrix is depicted as pseudo-code in Algorithm \ref{alg:rank-calculation}. Algorithm uses the inequality
 
 \begin{equation}
 e > \frac{\sqrt[]{\frac{\sum_{i=r+1}^{k} s_{i}^{2}}{m n}}}{X_{max}-X_{min}},
 \end{equation}
 
 \noindent
-where $e$ is $\mathit{NRMSD}$ used as an error limit that can not be exceeded to achieve reasonable quality of approximation.
+to test whether the desired rank has been reached; $e$ is $\mathit{NRMSD}$ used as an error threshold that can not be exceeded to achieve reasonable quality of approximation.
 
 \begin{algorithm}
   \caption{Calculation of rank for approximation matrix from maximum allowed error}\label{rankAlgorithm}
@@ -102,8 +102,8 @@ where $e$ is $\mathit{NRMSD}$ used as an error limit that can not be exceeded to
 Computational complexity of the exact SVD decomposition algorithm is $O(m^2n)$, where $m<n$. This theoretical algorithm complexity is confirmed by two benchmarks where the dependency of execution time on varying matrix dimension is shown. The results of the benchmarks are depicted in Figure \ref{fig:ExeTime_rows} and Figure \ref{fig:ExeTime_columns}. Several observations were made from the results:
 
 \begin{itemize}
-\item The algorithm is most efficient in cases where one dimension of the input matrix is very low compared to the other. However, this is almost always the case when compressing results from FEM -- number of time steps seldom exceeds hundreds.
-\item Moreover, time steps can be split into smaller ranges and the algorithm can be applied on each range separately. This will improve performance and can also increase quality of compression if the key time steps on the range boundaries are carefully selected.
+\item The algorithm is most efficient in cases where one dimension of the input matrix is very small compared to the other. However, this is almost always the case when compressing results from FEM -- number of incremental or time steps seldom exceeds hundreds.
+\item Moreover, incremental or time steps can be split into smaller ranges and the algorithm can be applied on each range separately. This will improve performance and can also increase quality of compression if the key time steps on the range boundaries are carefully selected.
 \item Randomized SVD algorithm has the same order of algorithmic complexity when full decomposition is required, but yet can significantly reduce execution time. However, the benchmarks are not designed to highlight the benefits of randomized SVD algorithms. The main advantage of the randomized SVD is in the ability to choose the rank of the approximation matrix in advance. In that case only limited number of singular values and corresponding singular vectors is calculated and algorithm performs much faster.
 \end{itemize}
 

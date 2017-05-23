@@ -22,7 +22,7 @@ The objective of a compression algorithm is to reduce amount of data representin
 
 Compression method can be lossy or lossless based on quality of data reconstructed from its compressed representation. Lossless methods are able to fully reconstruct original data. Lossy methods, on the other hand, produce only approximations of original data. 
 
-SVD is used as part of the compression algorithm. SVD method applied to arbitrary matrix produces decomposition that consist of corresponding singular values and singular vectors. This process is fully reversible (with the assumption that the numerical errors are negligible). The original matrix can be reconstructed by the multiplication of decomposed parts. However, the compression algorithm is based on modification of decomposition to create low-rank approximation matrix. The reconstructed matrix slightly differs from the original matrix and algorithm therefore does lossy compression.
+SVD is used as part of the compression algorithm. SVD method applied to arbitrary matrix produces decomposition that consist of corresponding singular values and singular vectors. This process is fully reversible (with the assumption that the numerical errors are negligible). The original matrix can be reconstructed by the multiplication of decomposed parts. However, the compression algorithm is based on modification of decomposition to create low-rank approximation matrix. The reconstructed matrix slightly differs from the original matrix and algorithm therefore performs lossy compression.
 
 \subsection{Low-rank approximation matrix}
 
@@ -41,7 +41,7 @@ where $s_i$ is the $i$-th singular value, $\bf{u}_i$ and $\bf{v}_i$ are correspo
 \label{eq:svd-approx-expansion}
 \end{equation}
 
-The quality of approximation depends on the magnitude of the singular values omitted from the approximation formula, namely $s_{r+1} ...  s_{n}$. The compression algorithm is based on an assumption that the first singular value is order-of-magnitude higher than singular values at the end of the decomposition sequence. In special cases, when $r=n$ or $s_{i}=0$ for all $i \geq r$, the omitted singular values do not contribute to the sum and the compression is therefore lossless. In other cases, approximation error has to be calculated and taken into account to avoid loss of important details in data.
+The quality of approximation depends on the magnitude of the singular values omitted from the approximation formula, namely $s_{r+1} ...  s_{n}$. The compression algorithm is based on an assumption that the first singular value is order-of-magnitude higher than singular values at the end of the decomposition sequence. In special cases, when $r=n$, or $s_{i}=0$ for all $i > r$, the omitted singular values do not contribute to the sum and the compression is therefore lossless. In other cases, approximation error has to be calculated and taken into account to avoid loss of important details in data.
 
 The main goal of the compression algorithm is to find a compromise between low approximation error and high compression ratio $c$ which is calculated using the formula
 
@@ -69,12 +69,12 @@ Low-rank approximation matrix method that is described in this paper is a lossy 
 \begin{itemize}
 \item \textbf{Mean square error}
 \begin{equation}
-\mathit{MSE}=\frac{1}{m n} \sum_{i=1}^{m} \sum_{j=1}^{n} (A_{ij} - A'_{ij})^{2},
+\mathit{MSE}=\frac{1}{m n} \sum_{i=1}^{m} \sum_{j=1}^{n} (a_{ij} - a'_{ij})^{2},
 \label{eq:mse-def}
 \end{equation}
 
 \noindent
-where $A_{ij}$ represents an element of the original matrix and $A'_{ij}$ represents an element of the
+where $a_{ij}$ represents an element of the original matrix and $a'_{ij}$ represents an element of the
 reconstructed matrix of dimension $m \times n$.
 
 \item \textbf{Rooted Mean Square Deviation}
@@ -115,9 +115,7 @@ The exact SVD of a $m \times n$ matrix has computational complexity \newline $O(
 As the implementation of the randomized SVD algorithm RedSVD library was used. RedSVD is an open-source software package for solving several matrix decompositions. The particular implementation of randomized version of decomposition is based on the algorithm described in \cite{Halko2011}. The brief summary of the algorithm steps follows below.
 
 % redsvd algorithm description
-Let $\mtrx{A}$ be a matrix to be analyzed with $n$ rows and $m$ columns, and $r$ be the rank of a truncated SVD (if $r = min(n, m)$, then the result is full SVD).
-
-At first, a random Gaussian matrix $\mtrx{O}$ with $m$ rows and $r$ columns is created and a sample matrix $\mtrx{Y} = \mtrx{A}^{\mathsf{T}} \mtrx{O}$ is computed. Then the Gram-Schmidt process is applied to $\mtrx{Y}$ so that each column of $\mtrx{Y}$ is orthonormalized. Then matrix $\mtrx{B} = \mtrx{A}\mtrx{Y}$ with $n$ rows and $r$ columns is computed. Although the size of $\mtrx{Y}$ is much smaller than that of $\mtrx{A}$, $\mtrx{Y}$ holds the information of $\mtrx{A}$, i.e. $\mtrx{A}\mtrx{Y}\mtrx{Y}^{\mathsf{T}} \approx \mtrx{A}$. Intuitively, the row information is compressed by $\mtrx{Y}$ and can be decompressed by $\mtrx{Y}^{\mathsf{T}}$.
+Let $\mtrx{A}$ be a matrix to be analyzed with $n$ rows and $m$ columns, and $r$ be the rank of a truncated SVD (if $r = min(n, m)$ is chosen, then the result is full SVD). As the first step, a random Gaussian matrix $\mtrx{O}$ with $m$ rows and $r$ columns is created and a sample matrix $\mtrx{Y} = \mtrx{A}^{\mathsf{T}} \mtrx{O}$ is computed. Then the Gram-Schmidt process is applied to $\mtrx{Y}$ so that each column of $\mtrx{Y}$ is orthonormalized. Then matrix $\mtrx{B} = \mtrx{A}\mtrx{Y}$ with $n$ rows and $r$ columns is computed. Although the size of $\mtrx{Y}$ is much smaller than that of $\mtrx{A}$, $\mtrx{Y}$ holds the information of $\mtrx{A}$, i.e. $\mtrx{A}\mtrx{Y}\mtrx{Y}^{\mathsf{T}} \approx \mtrx{A}$. Intuitively, the row information is compressed by $\mtrx{Y}$ and can be decompressed by $\mtrx{Y}^{\mathsf{T}}$.
 
 Similarly, another random Gaussian matrix $\mtrx{P}$ with $r$ rows and $r$ columns is created, and matrix $\mtrx{Z} = \mtrx{B}\mtrx{P}$ is computed. As in the previous case, the columns of $\mtrx{Z}$ are orthonormalized by the Gram-Schmidt process and $\mtrx{Z}\mtrx{Z}^{\mathsf{T}} \mtrx{B} \approx \mtrx{B}$. Then matrix $\mtrx{C} = \mtrx{Z}^{\mathsf{T}} \mtrx{B}$ is computed.
 

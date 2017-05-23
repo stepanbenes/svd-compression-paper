@@ -3,7 +3,7 @@
 
 The number of operations in the compression algorithm with respect to the number of stored incremental or time steps (the number of rows in the matrix $\mtrx{A}$) is depicted in Figure \ref{fig:ExeTime_rows} while the number of operations with respect to the number of points, where the results are stored (the number of columns of the matrix $\mtrx{A}$), is depicted in Figure \ref{fig:ExeTime_columns}. Especially on Figure \ref{fig:ExeTime_columns} is clearly visible that the randomized SVD algorithm is much faster than the classical one.
 
-These results confirm that the SVD implementation has algorithm complexity $O(m^2n)$, where $m$ is number of rows, $n$ is number of columns, and $m < n$. In case of $m > n$ the complexity would be $O(mn^2)$ as the algorithm takes advantage of non-squareness in that its complexity is only linear in the greater dimension.
+These results confirm that the SVD implementation has computational complexity $O(m^2n)$, where $m$ is number of rows, $n$ is number of columns, and $m < n$. In case of $m > n$ the complexity would be $O(mn^2)$ as the algorithm takes advantage of non-squareness in that its complexity is only linear in the greater dimension.
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/executionTime_varyingRows}
@@ -33,7 +33,7 @@ Behavior of the compression strategy introduced is presented on three real world
 \end{figure}
 
 % geological layers
-Figure \ref{fig:chotkova:mesh}  shows results from an analysis of geological layers which was based on theory plasticity. More details can be found in reference \cite{Koudelka2006}. This project was chosen mainly to study behavior of compression algorithm when dealing with high discontinuities in data in spatial dimension (as can be seen in visualization). As summarized in Figure \ref{fig:chotkova:NRMSD} and Figure \ref{fig:chotkova:MaxError} this has negligible effect on quality of compression.
+Figure \ref{fig:chotkova:mesh}  shows results from an analysis of geological layers which was based on theory plasticity. More details can be found in \cite{Koudelka2006}. This project was chosen mainly to study behavior of compression algorithm when dealing with high discontinuities in data in spatial dimension (as can be seen in visualization). As summarized in Figure \ref{fig:chotkova:NRMSD} and Figure \ref{fig:chotkova:MaxError} this has negligible effect on quality of compression.
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/chotkova_screenshot}
@@ -54,7 +54,7 @@ Figure \ref{fig:chotkova:mesh}  shows results from an analysis of geological lay
 \end{figure}
 
 % reactor vessel 2D
-Figure \ref{fig:mechaxisym:mesh} contains visualization of results of two-dimensional analysis, where axisymmetric description was used for analysis of aging of a reactor vessel. Details about the analysis can be found in reference \cite{Kruis2005}. There are exactly 232 analysis time steps. The resulting data has linear function character with several discontinuities in temporal dimension. There are few time steps in which resulting discrete functions have very different values compared to neighboring time steps. This was supposed to have negative impact on the quality of compression. However, as can be seen in Figure \ref{fig:mechaxisym:NRMSD}, the quality is better than expected; e.g., if the rank of approximation matrix is set to 3 (compared to 232 being the rank of the original matrix) the normalized relative error ($\mathit{NRMSD}$) does not exceed $10^{-5}$.
+Figure \ref{fig:mechaxisym:mesh} contains visualization of results of two-dimensional analysis, where axisymmetric description was used for analysis of aging of a reactor vessel. Details about the analysis can be found in \cite{Kruis2005}. There are exactly 232 analysis time steps. The resulting data has linear function character with several discontinuities in temporal dimension. There are few time steps in which resulting discrete functions have very different values compared to neighboring time steps. This was supposed to have negative impact on the quality of compression. However, as can be seen in Figure \ref{fig:mechaxisym:NRMSD}, the quality is better than expected; e.g., if the rank of approximation matrix is set to 3 (compared to 232 being the rank of the original matrix) the normalized relative error ($\mathit{NRMSD}$) does not exceed $10^{-5}$.
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/mechaxisym_screenshot}
