@@ -3,18 +3,17 @@
 
 The number of operations in the compression algorithm with respect to the number of stored incremental or time steps (the number of rows in the matrix $\mtrx{A}$) is depicted in Figure \ref{fig:ExeTime_rows} while the number of operations with respect to the number of points, where the results are stored (the number of columns of the matrix $\mtrx{A}$), is depicted in Figure \ref{fig:ExeTime_columns}. Especially on Figure \ref{fig:ExeTime_columns} is clearly visible that the randomized SVD algorithm is much faster than the classical one.
 
-% MELA BY ZDE BYT DISKUZE, PROC PRI ROSTOUCIM POCTU RADKU SE NELINEARNE ZVYSUJE POCET OPRACI, ALE PRO ROSTOUCI POCET SLOUPCU SE POCET OPERACI ZVETSUJE LINEARNE.
-% odpovida teoreticke vypocetni slozitosti $O(m^2n)$, where $m<n$. Vyplyva z pouziteho algoritmu JacobiSVD (viz zdrojak)...
+These results confirm that the SVD implementation has algorithm complexity $O(m^2n)$, where $m$ is number of rows, $n$ is number of columns, and $m < n$. In case of $m > n$ the complexity would be $O(mn^2)$ as the algorithm takes advantage of non-squareness in that its complexity is only linear in the greater dimension.
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/executionTime_varyingRows}
-\caption{Dependency of SVD execution time on number of rows of an input matrix.}
+\caption{Dependency of SVD execution time on number of rows of an input matrix (having fixed number of columns).}
 \label{fig:ExeTime_rows}
 \end{figure}
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/executionTime_varyingColumns}
-\caption{Dependency of SVD execution time on number of columns of an input matrix.}
+\caption{Dependency of SVD execution time on number of columns of an input matrix (having fixed number of rows).}
 \label{fig:ExeTime_columns}
 \end{figure}
 

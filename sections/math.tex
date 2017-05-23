@@ -20,8 +20,6 @@ This is the basic idea behind SVD: taking a high dimensional, highly variable se
 
 The objective of a compression algorithm is to reduce amount of data representing FEM results and also the ability to reconstruct original data from its smaller representation. This saves storage capacity and also accelerates data transfer between computers as the analysis itself and the post-processing of results is usually done on different workstations.
 
-Exact SVD of a $m \times n$ matrix has computational complexity $O(min(mn^2, m^2n))$ using the "big-O" notation. In \cite{Holmes2007, Candes2011, Woolfe2008, Martinsson2011} are described randomized algorithms for constructing approximate matrix factorizations that have better asymptotic complexity. Their main purpose is to accelerate calculations of matrix decompositions which tend to be very slow for large data sets.
-
 Compression method can be lossy or lossless based on quality of data reconstructed from its compressed representation. Lossless methods are able to fully reconstruct original data. Lossy methods, on the other hand, produce only approximations of original data. 
 
 SVD is used as part of the compression algorithm. SVD method applied to arbitrary matrix produces decomposition that consist of corresponding singular values and singular vectors. This process is fully reversible (with the assumption that the numerical errors are negligible). The original matrix can be reconstructed by the multiplication of decomposed parts. However, the compression algorithm is based on modification of decomposition to create low-rank approximation matrix. The reconstructed matrix slightly differs from the original matrix and algorithm therefore does lossy compression.
@@ -30,11 +28,6 @@ SVD is used as part of the compression algorithm. SVD method applied to arbitrar
 
 From the definition of SVD in (\ref{eq:svd-def}) and from the properties of SVD follows the fact that a matrix can be represented in the form of its SVD components as a sum of rank-1 matrices
 
-%\begin{equation}
-%\mtrx{A}=\mtrx{U_{1}}S_{1}\mtrx{V_{1}^{T}}+\mtrx{U_{2}}S_{2}\mtrx{V_{2}^{T}}+ ... +\mtrx{U_{n}}S_{n}\mtrx{V_{n}^{T}},
-%\label{eq:svd-expansion}
-%\end{equation}
-
 \begin{equation}
 \mtrx{A}=\sum_{i=1}^{n} s_{i}\bf{u}_i\bf{v}_i^{\mathsf{T}},
 \label{eq:svd-expansion}
@@ -42,11 +35,6 @@ From the definition of SVD in (\ref{eq:svd-def}) and from the properties of SVD 
 
 \noindent
 where $s_i$ is the $i$-th singular value, $\bf{u}_i$ and $\bf{v}_i$ are corresponding singular vectors, and $n$ is the rank of matrix~$\mtrx{A}$. Considering the fact that singular values are ordered $s_{1} \geq s_{2} \geq s_{3} \geq ... \geq s_{n}$, the above formula implies that the first term of the sum would have the highest contribution and the last term would have the lowest contribution to matrix~$\mtrx{A}$. Therefore, if we take only first $r$ members of the above summation we get an approximation matrix
-
-%\begin{equation}
-%\mtrx{A'}=\mtrx{U_{1}}S_{1}\mtrx{V_{1}^{T}}+\mtrx{U_{2}}S_{2}\mtrx{V_{2}^{T}}+ ... +\mtrx{U_{r}}S_{r}\mtrx{V_{r}^{T}}.
-%\label{eq:svd-approx-expansion}
-%\end{equation}
 
 \begin{equation}
 \mtrx{A'}=\sum_{i=1}^{r} s_{i}\bf{u}_i\bf{v}_i^{\mathsf{T}}.
@@ -119,16 +107,43 @@ PSNR &=& 10\log_{10}\frac{(X_{max}-X_{min})^{2}}{MSE} =
 
 \end{itemize}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\subsection{Randomized SVD}
-%In \cite{Holmes, Halko2011, Candes2009} are described randomized algorithms for constructing approximate matrix factorizations. Their main purpose is to accelerate calculations of matrix decompositions which tend to be very slow for large data sets.
+\subsection{Randomized SVD}
 
-%Exact SVD of a $m \times n$ matrix has time complexity $O(min(mn^2, m^2n))$ using the "big-O" notation. Assume the data points are in the columns of $\mtrx{A} \in \mtrx{M_{m,n}}(\mathbb{R})$ where $m \leq n$. Note that $\mtrx{AA^T}$ is the dataset covariance matrix. Then a simple method is to randomly choose $k<m$ columns of $\mtrx{A}$ that form a matrix $\mtrx{B}$. Statistically, the SVD of $\mtrx{BB^T}$ will be close to that of $\mtrx{AA^T}$; thus it suffices to calculate the SVD of $\mtrx{B}$, the complexity of which, is only $O(k^2m)$.
+Exact SVD of a $m \times n$ matrix has computational complexity $O(min(mn^2, m^2n))$ using the "big-O" notation. When applied on large data sets it tends to be very time-consuming. In \cite{Holmes2007, Candes2011, Woolfe2008, Martinsson2011} are described randomized methods for constructing approximate matrix factorizations which offer significant speedups over classical methods.
+
+As the implementation of the randomized SVD algorithm \textit{RedSVD} library was used. \textit{RedSVD} is an open-source software package for solving several matrix decompositions. The particular implementation of randomized version of decomposition is based on the algorithm described in \cite{Halko2011}. The brief summary of the algorithm steps follows below.
+
+% redsvd algorithm description
+Let $\mtrx{A}$ be a matrix to be analyzed with $n$ rows and $m$ columns, and $r$ be the rank of a truncated SVD (if $r = min(n, m)$ is chosen, then it is the original SVD).
+
+At first, a random Gaussian matrix $\mtrx{O}$ with $m$ rows and $r$ columns is created and a sample matrix $\mtrx{Y} = \mtrx{A}^{\mathsf{T}} \mtrx{O}$ is computed. Then the Gram-Schmidt process is applied to $\mtrx{Y}$ so that each column of $\mtrx{Y}$ is orthonormalized. Then matrix $\mtrx{B} = \mtrx{A}\mtrx{Y}$ with $n$ rows and $r$ columns is computed. Although the size of $\mtrx{Y}$ is much smaller than that of $\mtrx{A}$, $\mtrx{Y}$ holds the information of $\mtrx{A}$; that means $\mtrx{A}\mtrx{Y}\mtrx{Y}^{\mathsf{T}} \approx \mtrx{A}$. Intuitively, the row information is compressed by $\mtrx{Y}$ and can be decompressed by $\mtrx{Y}^{\mathsf{T}}$.
+
+Similarly, another random Gaussian matrix $\mtrx{P}$ with $r$ rows and $r$ columns is created, and matrix $\mtrx{Z} = \mtrx{B}\mtrx{P}$ is computed. As in the previous case, the columns of $\mtrx{Z}$ are orthonormalized by the Gram-Schmidt process and $\mtrx{Z}\mtrx{Z}^{\mathsf{T}} \mtrx{B} \approx \mtrx{B}$. Then matrix $\mtrx{C} = \mtrx{Z}^{\mathsf{T}} \mtrx{B}$ is computed.
+
+Finally, algorithm performs SVD of $\mtrx{C}$ using the traditional SVD solver, and obtains $\mtrx{C} = \mtrx{\widetilde{U}}\mtrx{\widetilde{S}}\mtrx{\widetilde{V}}^{\mathsf{T}}$ where $\mtrx{\widetilde{U}}$ and $\mtrx{\widetilde{V}}$ are orthonormal matrices, and $\mtrx{\widetilde{S}}$ is a diagonal matrix whose entries are singular values of matrix $\mtrx{C}$. Since matrix $\mtrx{C}$ is usually very small, computational time of this step is negligible.
+
+Now $\mtrx{A}$ is decomposed as
+
+\begin{eqnarray}
+\mtrx{A} &\approx& \mtrx{A}\mtrx{Y}\mtrx{Y}^{\mathsf{T}} =
+\\
+&=& \mtrx{B}\mtrx{Y}^{\mathsf{T}} \approx \nonumber
+\\
+&\approx& \mtrx{Z}\mtrx{Z}^{\mathsf{T}}\mtrx{B}\mtrx{Y}^{\mathsf{T}} = \nonumber
+\\
+&=& \mtrx{Z}\mtrx{C}\mtrx{Y}^{\mathsf{T}} = \nonumber
+\\
+&=& \mtrx{Z}\mtrx{\widetilde{U}} \mtrx{\widetilde{S}} \mtrx{\widetilde{V}}^{\mathsf{T}}\mtrx{Y}^{\mathsf{T}} = \nonumber
+\\
+&=& \mtrx{Z}\mtrx{\widetilde{U}} \mtrx{\widetilde{S}} (\mtrx{Y}\mtrx{\widetilde{V}})^{\mathsf{T}}. \nonumber
+\label{eq:redsvd}
+\end{eqnarray}
+
+\noindent
+Both $\mtrx{Z}\mtrx{\widetilde{U}}$ and $\mtrx{Y}\mtrx{\widetilde{V}}$ are orthornormal, $\mtrx{Z}\mtrx{\widetilde{U}}$ contains approximations of left singular vectors, and $\mtrx{Y}\mtrx{\widetilde{V}}$ contains approximations of right singular vectors of matrix $\mtrx{A}$. $\mtrx{\widetilde{S}}$ contains approximations of the first $r$ singular values of matrix $\mtrx{A}$.
 
 % http://mathoverflow.net/questions/161252/what-is-the-time-complexity-of-truncated-svd
+%Exact SVD of a $m \times n$ matrix has time complexity $O(min(mn^2, m^2n))$ using the "big-O" notation. Assume the data points are in the columns of $\mtrx{A} \in \mtrx{M_{m,n}}(\mathbb{R})$ where $m \leq n$. Note that $\mtrx{AA^T}$ is the dataset covariance matrix. Then a simple method is to randomly choose $k<m$ columns of $\mtrx{A}$ that form a matrix $\mtrx{B}$. Statistically, the SVD of $\mtrx{BB^T}$ will be close to that of $\mtrx{AA^T}$; thus it suffices to calculate the SVD of $\mtrx{B}$, the complexity of which, is only $O(k^2m)$.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-% subsection: Sparse matrix of details: Mozna uplne vyhodit, stejne to neni implementovano -- uvest jen v sekci Optimization nebo v Conclusion
+% subsection: Sparse matrix of details ?
