@@ -110,20 +110,20 @@ PSNR &=& 10\log_{10}\frac{(X_{max}-X_{min})^{2}}{MSE} =
 
 \subsection{Randomized SVD}
 
-Exact SVD of a $m \times n$ matrix has computational complexity $O(min(mn^2, m^2n))$ using the "big-O" notation. When applied on large data sets it tends to be very time-consuming. In \cite{Holmes2007, Candes2011, Woolfe2008, Martinsson2011} are described randomized methods for constructing approximate matrix factorizations which offer significant speedups over classical methods.
+The exact SVD of a $m \times n$ matrix has computational complexity \newline $O(min(mn^2, m^2n))$ using the "big-O" notation. When applied on large data sets it tends to be very time-consuming. In \cite{Holmes2007, Candes2011, Woolfe2008, Martinsson2011} are described randomized methods for constructing approximate matrix factorizations which offer significant speedups over classical methods.
 
-As the implementation of the randomized SVD algorithm \textit{RedSVD} library was used. \textit{RedSVD} is an open-source software package for solving several matrix decompositions. The particular implementation of randomized version of decomposition is based on the algorithm described in \cite{Halko2011}. The brief summary of the algorithm steps follows below.
+As the implementation of the randomized SVD algorithm RedSVD library was used. RedSVD is an open-source software package for solving several matrix decompositions. The particular implementation of randomized version of decomposition is based on the algorithm described in \cite{Halko2011}. The brief summary of the algorithm steps follows below.
 
 % redsvd algorithm description
-Let $\mtrx{A}$ be a matrix to be analyzed with $n$ rows and $m$ columns, and $r$ be the rank of a truncated SVD (if $r = min(n, m)$ is chosen, then it is the original SVD).
+Let $\mtrx{A}$ be a matrix to be analyzed with $n$ rows and $m$ columns, and $r$ be the rank of a truncated SVD (if $r = min(n, m)$, then the result is full SVD).
 
-At first, a random Gaussian matrix $\mtrx{O}$ with $m$ rows and $r$ columns is created and a sample matrix $\mtrx{Y} = \mtrx{A}^{\mathsf{T}} \mtrx{O}$ is computed. Then the Gram-Schmidt process is applied to $\mtrx{Y}$ so that each column of $\mtrx{Y}$ is orthonormalized. Then matrix $\mtrx{B} = \mtrx{A}\mtrx{Y}$ with $n$ rows and $r$ columns is computed. Although the size of $\mtrx{Y}$ is much smaller than that of $\mtrx{A}$, $\mtrx{Y}$ holds the information of $\mtrx{A}$; that means $\mtrx{A}\mtrx{Y}\mtrx{Y}^{\mathsf{T}} \approx \mtrx{A}$. Intuitively, the row information is compressed by $\mtrx{Y}$ and can be decompressed by $\mtrx{Y}^{\mathsf{T}}$.
+At first, a random Gaussian matrix $\mtrx{O}$ with $m$ rows and $r$ columns is created and a sample matrix $\mtrx{Y} = \mtrx{A}^{\mathsf{T}} \mtrx{O}$ is computed. Then the Gram-Schmidt process is applied to $\mtrx{Y}$ so that each column of $\mtrx{Y}$ is orthonormalized. Then matrix $\mtrx{B} = \mtrx{A}\mtrx{Y}$ with $n$ rows and $r$ columns is computed. Although the size of $\mtrx{Y}$ is much smaller than that of $\mtrx{A}$, $\mtrx{Y}$ holds the information of $\mtrx{A}$, i.e. $\mtrx{A}\mtrx{Y}\mtrx{Y}^{\mathsf{T}} \approx \mtrx{A}$. Intuitively, the row information is compressed by $\mtrx{Y}$ and can be decompressed by $\mtrx{Y}^{\mathsf{T}}$.
 
 Similarly, another random Gaussian matrix $\mtrx{P}$ with $r$ rows and $r$ columns is created, and matrix $\mtrx{Z} = \mtrx{B}\mtrx{P}$ is computed. As in the previous case, the columns of $\mtrx{Z}$ are orthonormalized by the Gram-Schmidt process and $\mtrx{Z}\mtrx{Z}^{\mathsf{T}} \mtrx{B} \approx \mtrx{B}$. Then matrix $\mtrx{C} = \mtrx{Z}^{\mathsf{T}} \mtrx{B}$ is computed.
 
-Finally, algorithm performs SVD of $\mtrx{C}$ using the traditional SVD solver, and obtains $\mtrx{C} = \mtrx{\widetilde{U}}\mtrx{\widetilde{S}}\mtrx{\widetilde{V}}^{\mathsf{T}}$ where $\mtrx{\widetilde{U}}$ and $\mtrx{\widetilde{V}}$ are orthonormal matrices, and $\mtrx{\widetilde{S}}$ is a diagonal matrix whose entries are singular values of matrix $\mtrx{C}$. Since matrix $\mtrx{C}$ is usually very small, computational time of this step is negligible.
+Finally, the algorithm performs SVD of $\mtrx{C}$ using traditional exact SVD solver and obtains $\mtrx{C} = \mtrx{\widetilde{U}}\mtrx{\widetilde{S}}\mtrx{\widetilde{V}}^{\mathsf{T}}$, where $\mtrx{\widetilde{U}}$ and $\mtrx{\widetilde{V}}$ are orthonormal matrices, and $\mtrx{\widetilde{S}}$ is a diagonal matrix whose entries are singular values of matrix $\mtrx{C}$. Since matrix $\mtrx{C}$ is usually very small, computational time of this step is negligible.
 
-Now $\mtrx{A}$ is decomposed as
+$\mtrx{A}$ is then decomposed as
 
 \begin{eqnarray}
 \mtrx{A} &\approx& \mtrx{A}\mtrx{Y}\mtrx{Y}^{\mathsf{T}} =
