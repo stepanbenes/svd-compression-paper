@@ -99,7 +99,7 @@ to test whether the desired rank has been reached; $e$ is $\mathit{NRMSD}$ used 
 
 % http://mathoverflow.net/questions/161252/what-is-the-time-complexity-of-truncated-svd
 
-Computational complexity of the exact SVD decomposition algorithm is $O(m^2n)$, where $m<n$. This theoretical algorithm complexity is confirmed by two benchmarks where the dependency of execution time on varying matrix dimension is shown. The results of the benchmarks are depicted in Figure \ref{fig:ExeTime_rows} and Figure \ref{fig:ExeTime_columns}. Several observations were made from the results:
+Computational complexity of the exact SVD decomposition algorithm is $\mathrm{O}(m^2n)$, where $m<n$. This theoretical algorithm complexity is confirmed by two benchmarks where the dependency of execution time on varying matrix dimension is shown. The results of the benchmarks are depicted in Figure \ref{fig:ExeTime_rows} and Figure \ref{fig:ExeTime_columns}. Several observations were made from the results:
 
 \begin{itemize}
 \item The algorithm is most efficient in cases where one dimension of the input matrix is very small compared to the other. However, this is almost always the case when compressing results from FEM -- number of incremental or time steps seldom exceeds hundreds.
