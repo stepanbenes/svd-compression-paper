@@ -5,7 +5,7 @@ SVD decomposition is applied on matrices. The first thing to do is therefore to 
 
 There are two main reasons to store particular results in separate matrices. First, the size of matrices is smaller than the size of a matrix which contains all results and therefore the SVD will be performed faster. Second, the magnitudes of particular fields are very different (the stress tensor components are several order of magnitude larger than the components of the displacement vector) and the data compression algorithm would suppress the fields with small magnitudes. Once the matrices $\mtrx{A}$ are assembled for each field, the compression algorithm can be applied on it. It is purely algebraic procedure and no information about geometry of the mesh is needed.
 
-Let us assume that the matrix is not empty and is full rank. Then from the formula (\ref{eq:cr-def}) follows that if $r$ equals to the rank of matrix $\mtrx{A}$ the compression ratio is always higher than one. In other words the memory consumption of stored decomposition is bigger than the size of the original matrix. To make the compression algorithm applicable the parameter $r$ must satisfy the condition
+Let us assume that the matrix is not empty and is full rank. Then from the formula (\ref{eq:cr-def}) follows that if $r$ equals to the rank of matrix $\mtrx{A}$, the compression ratio is always higher than one. In other words the memory consumption of stored decomposition is bigger than the size of the original matrix. To make the compression algorithm applicable, the parameter $r$ must satisfy the condition
 
 \begin{equation}
 r<\frac{m n}{m+n+1}.
@@ -13,10 +13,10 @@ r<\frac{m n}{m+n+1}.
 \end{equation}
 
 \noindent
-Considering the usual shape of matrix containing FEM results this inequality is easily satisfiable even for the $r$ being close to the rank of the original matrix as in the typical case the number of nodes or integration points is much higher than the number of analysis steps and therefore $m \ll n$.
+Considering the usual shape of matrix containing FEM results, this inequality is easily satisfiable even for the $r$ being close to the rank of the original matrix as in the typical case the number of nodes or integration points is much higher than the number of analysis steps and therefore $m \ll n$.
 
 \subsection{Algorithm description}
-Once the SVD decomposition is calculated the compression algorithm removes a certain number of singular values and corresponding singular vectors. The remaining singular values and vectors represent the compressed data. There are two strategies that influence the way how to get the number of singular values to be preserved -- resulting size and quality. Each strategy is assigned a control parameter that determines compression ratio or approximation error.
+Once the SVD decomposition is calculated, the compression algorithm removes a certain number of singular values and corresponding singular vectors. The remaining singular values and vectors represent the compressed data. There are two strategies that influence the way how to get the number of singular values to be preserved -- resulting size and quality. Each strategy is assigned a control parameter that determines compression ratio or approximation error.
 
 \paragraph{Compression ratio}
 If the focus is only on the size of compressed data, the rank $r$ of the approximation matrix can be calculated by the formula
@@ -30,9 +30,9 @@ r=\ceil*{c \times \frac{m n}{m+n+1}},
 where $c$ is the compression ratio, $0 \leq c \leq 1$ ($0$ results in absolute compression while $1$ results in no compression); $\ceil*{.}$ is the ceiling function.
 
 \paragraph{Approximation error}
-In the usual case the most important measure to take into account is the approximation error. Algorithm is trying to minimize the compression ratio while at the same time ensuring that predefined approximation error threshold is not exceeded. To quantify the error the Normalized root-mean-square deviation ($\mathit{NRMSD}$) is used. The normalized error metric enables to work with various data sets that have different scales. $\mathit{NRMSD}$ is defined in section \ref{sec:error}.
+In a usual case, the most important measure to take into account is the approximation error. Algorithm is trying to minimize the compression ratio while at the same time ensuring that predefined approximation error threshold is not exceeded. To quantify the error, the Normalized root-mean-square deviation ($\mathit{NRMSD}$) is used. The normalized error metric enables to work with various data sets that have different scales. $\mathit{NRMSD}$ is defined in section \ref{sec:error}.
 
-To effectively calculate the final rank of the approximation matrix from the desired approximation error the interesting property of singular values
+To effectively calculate the final rank of the approximation matrix from the desired approximation error, the interesting property of singular values
 
 % TODO: Reference to source or further explanation needed. (prof. Marek?)
 
@@ -42,7 +42,7 @@ To effectively calculate the final rank of the approximation matrix from the des
 \end{equation}
 
 \noindent
-where $k=min(m, n)$, i.e. the smallest of two dimensions of the matrix $\mtrx{A}$, is made use of. The above formula states that the sum of squared elements of matrix $\mtrx{A}$ equals to the sum of squared singular values $s_{i}$ of the same matrix $\mtrx{A}$.
+where $k=min(m, n)$, i.e. the smallest of two dimensions of the matrix $\mtrx{A}$, is made use of. The above formula states that the sum of squared elements of the matrix $\mtrx{A}$ equals to the sum of squared singular values $s_{i}$ of the same matrix $\mtrx{A}$.
 
 Using formulas \eqref{eq:svd-expansion} and \eqref{eq:svd-approx-expansion} the equation \eqref{eq:elem-sqr-sigma-sqr} can be applied to the difference between original matrix $\mtrx{A}$ and approximation matrix $\mtrx{A'}$
 
@@ -99,14 +99,14 @@ to test whether the desired rank has been reached; $e$ is $\mathit{NRMSD}$ used 
 
 % http://mathoverflow.net/questions/161252/what-is-the-time-complexity-of-truncated-svd
 
-Computational complexity of the exact SVD decomposition algorithm is $\mathrm{O}(m^2n)$, where $m<n$. This theoretical algorithm complexity is confirmed by two benchmarks where the dependency of execution time on varying matrix dimension is shown. The results of the benchmarks are depicted in Figure \ref{fig:ExeTime_rows} and Figure \ref{fig:ExeTime_columns}. Several observations were made from the results:
+Computational complexity of the exact SVD decomposition algorithm is $\mathrm{O}(m^2n)$, where $m<n$. This theoretical algorithm complexity is confirmed by two benchmarks where the dependency of the execution time on the varying matrix dimension is shown. The results of the benchmarks are depicted in Figure \ref{fig:ExeTime_rows} and Figure \ref{fig:ExeTime_columns}. Several observations were made from the results:
 
 \begin{itemize}
 \item The algorithm is most efficient in cases where one dimension of the input matrix is very small compared to the other. However, this is almost always the case when compressing results from FEM -- number of incremental or time steps seldom exceeds hundreds.
 \item Moreover, incremental or time steps can be split into smaller ranges and the algorithm can be applied on each range separately. This will improve performance and can also increase quality of compression if the key time steps on the range boundaries are carefully selected.
-\item Randomized SVD algorithm has the same order of algorithmic complexity when full decomposition is required, but yet can significantly reduce execution time. However, the benchmarks are not designed to highlight the benefits of randomized SVD algorithms. The main advantage of the randomized SVD is in the ability to choose the rank of the approximation matrix in advance. In that case only limited number of singular values and corresponding singular vectors is calculated and algorithm performs much faster.
+\item The randomized SVD algorithm has the same order of algorithmic complexity when full decomposition is required, but yet can significantly reduce execution time. However, the benchmarks are not designed to highlight the benefits of randomized SVD algorithms. The main advantage of the randomized SVD is in the ability to choose the rank of the approximation matrix in advance. In that case only limited number of singular values and corresponding singular vectors is calculated and algorithm performs much faster.
 \end{itemize}
 
-Storage size of SVD decomposition itself can also be optimized. $\mtrx{S}$ being a diagonal matrix can be stored as single list of singular values $s_{i}$ or can be even multiplied with the matrix of left singular vectors $\mtrx{U}$.
+Storage size of SVD decomposition itself can also be optimized. $\mtrx{S}$, being a diagonal matrix, can be stored as single list of singular values $s_{i}$, or can be even multiplied with the matrix of left singular vectors $\mtrx{U}$.
 
 % main features for optimization: key time steps (time step span compression), Randomized SVD, Parallelization, Sparse matrix of details, prenasobeni U matice singularnimi cisly, trochu usetrim pamet, mohu pouzit vzorkovani...

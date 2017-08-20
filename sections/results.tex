@@ -1,7 +1,7 @@
 \section{Results}
 \label{sec:results}
 
-The number of operations in the compression algorithm with respect to the number of stored incremental or time steps (the number of rows in the matrix $\mtrx{A}$) is depicted in Figure \ref{fig:ExeTime_rows} while the number of operations with respect to the number of points, where the results are stored (the number of columns of the matrix $\mtrx{A}$), is depicted in Figure \ref{fig:ExeTime_columns}. Especially on Figure \ref{fig:ExeTime_columns} is clearly visible that the randomized SVD algorithm is much faster than the classical one.
+The number of operations in the compression algorithm with respect to the number of the stored incremental or time steps (the number of rows in the matrix $\mtrx{A}$) is depicted in Figure \ref{fig:ExeTime_rows} while the number of operations with respect to the number of points, where the results are stored (the number of columns of the matrix $\mtrx{A}$), is depicted in Figure \ref{fig:ExeTime_columns}. Especially on Figure \ref{fig:ExeTime_columns} is clearly visible that the randomized SVD algorithm is much faster than the classical one.
 
 These results confirm that the SVD implementation has computational complexity $\mathrm{O}(m^2n)$, where $m$ is number of rows, $n$ is number of columns, and $m < n$. In case of $m > n$ the complexity would be $\mathrm{O}(mn^2)$ as the algorithm takes advantage of non-squareness in that its complexity is only linear in the greater dimension.
 
@@ -84,7 +84,7 @@ Figure \ref{fig:PSNR} summarizes the compression error for all three benchmarks 
 \end{figure}
 
 % Execution times
-Besides the error also the execution speed of compression algorithm was measured. In Figure \ref{fig:temelin:ExeTime} is comparison of execution times for standard versus randomized SVD compression algorithms. Interestingly, execution time of standard SVD is independent of target rank whereas execution time of randomized SVD decreases linearly with decreasing target rank. If the rank is known ahead of time the fact can be taken advantage of.
+Besides the error also the execution speed of compression algorithm was measured. In Figure \ref{fig:temelin:ExeTime}, there is a comparison of execution times for standard versus randomized SVD compression algorithms. Interestingly, execution time of standard SVD is independent of target rank whereas execution time of randomized SVD decreases linearly with decreasing target rank. If the rank is known ahead of time the fact can be taken advantage of.
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/temelin_ExecutionTime}
@@ -92,7 +92,7 @@ Besides the error also the execution speed of compression algorithm was measured
 \label{fig:temelin:ExeTime}
 \end{figure}
 
-The memory consumption of compressed results for reactor containment analysis is summarized in Table \ref{tab:mem-consum}. For different values of compression ratio shows memory size in megabytes. Compression ratio $c$ is an input parameter to the compression algorithm specifying amount of singular values ought to be removed from the SVD decomposition as follows from the equation (\ref{eq:rank-from-comp-ratio}). Size factor describes the final outcome of compression when compared to the original size.
+The memory consumption of compressed results for reactor containment analysis is summarized in Table \ref{tab:mem-consum}. For different values of compression ratio shows memory size in megabytes. In this benchmark the compression ratio $c$ is an input parameter to the compression algorithm. As follows from the equation (\ref{eq:rank-from-comp-ratio}), the value of the compression ratio directly affects the amount of singular values ought to be removed from the SVD decomposition. Size factor describes the final outcome of compression when compared to the original size.
 
 \begin{table}[H]
 \centering
