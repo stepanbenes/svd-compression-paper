@@ -12,17 +12,21 @@ matrix $\mtrx{S} \in \mathbb{R}^{m \times n}$, and the transpose of an orthogona
 \end{equation}
 
 \noindent
-where $\mtrx{U^\mathsf{T}U} = \mtrx{I}$, $\mtrx{V^\mathsf{T}V} = \mtrx{I}$; the columns of $\mtrx{U}$ are orthonormal eigenvectors of $\mtrx{AA^\mathsf{T}}$, the columns of $\mtrx{V}$ are orthonormal eigenvectors of $\mtrx{A^\mathsf{T}A}$, and $\mtrx{S}$ (sometimes referred to as $\mtrx{\Sigma}$) is a diagonal matrix containing singular values in descending order, which are at the same time the square roots of eigenvalues of $\mtrx{U}$ or $\mtrx{V}$.
+where $\mtrx{U^\mathsf{T}U} = \mtrx{I}$, $\mtrx{V^\mathsf{T}V} = \mtrx{I}$. The columns of $\mtrx{U}$ are orthonormal eigenvectors of $\mtrx{AA^\mathsf{T}}$, which are called the "left" singular vectors. The columns of $\mtrx{V}$ are orthonormal eigenvectors of $\mtrx{A^\mathsf{T}A}$ called the "right" singular vectors. $\mtrx{S}$ (sometimes referred to as $\mtrx{\Sigma}$) is a diagonal matrix containing singular values in descending order, which are at the same time the nonzero square roots of the eigenvalues of $\mtrx{AA^\mathsf{T}}$ and $\mtrx{A^\mathsf{T}A}$.
 
-SVD can be seen as a method for transforming correlated variables into a set of uncorrelated ones. At the same time, SVD is a method for identifying and ordering the dimensions along which data points show the most variation. Once it has been identified where the most variation is, it is possible to find the best approximation of the original data points using fewer dimensions. Hence, SVD can be seen as a method for data reduction/compression.
+% The singular values are the nonzero square roots of the eigenvalues from AAT and ATA. The eigenvectors of AAT are called the \left" singular vectors (U) while the eigenvectors of ATA are the right" singular vectors (V).
 
-This is the basic idea behind SVD: taking a high dimensional, highly variable set of data points and reducing it to a lower dimensional space that exposes the substructure of the original data more clearly and orders it from most variation to the least. What makes SVD practical for data compression applications is that variation below a particular threshold can be simply ignored to massively reduce data with assurance that the main relationships of interest have been preserved.
+SVD can be seen as a method for transforming correlated variables into a set of uncorrelated ones. At the same time, SVD is a method for ordering the dimensions based on variation and identifying the dimension with the largest variation. Once this dimension is identified, it is possible to find the best approximation of the original data points using fewer dimensions. Hence, SVD can be seen as a method for data reduction/compression.
 
-The objective of a compression algorithm is to reduce amount of data representing FEM results and also the ability to reconstruct original data from its smaller representation. This saves storage capacity and also accelerates the data transfer between computers as the analysis itself and the post-processing of results is usually done on different workstations.
+\subsection{SVD compression}
 
-A compression method can be lossy or lossless based on quality of data reconstructed from its compressed representation. Lossless methods are able to fully reconstruct original data. Lossy methods, on the other hand, produce only approximations of original data. 
+This is the basic idea behind SVD: taking a high dimensional, highly variable set of data points and reducing it to a lower dimensional space that exposes the substructure of the original data more clearly and orders it from the largest variation to the least. What makes SVD practical for data compression applications is that variation below a particular threshold can be simply ignored to massively reduce data with assurance that the main relationships of interest have been preserved.
 
-SVD is used as a part of the compression algorithm. The SVD method applied to arbitrary matrix produces decomposition that consist of corresponding singular values and singular vectors. This process is fully reversible (with the assumption that the numerical errors are negligible). The original matrix can be reconstructed by the multiplication of decomposed parts. However, the compression algorithm is based on modification of decomposition to create low-rank approximation matrix. The reconstructed matrix slightly differs from the original matrix and algorithm therefore performs lossy compression.
+The objective of a compression algorithm is to reduce amount of data representing FEM results and also the ability to reconstruct original data from its smaller representation. This saves storage capacity and also accelerates the data transfer between computers as the analysis itself and the post-processing of results is sometimes done on different workstations.
+
+A compression method can be lossy or lossless. Lossless methods are able to fully reconstruct original data. Lossy methods, on the other hand, produce only approximations of original data.
+
+SVD is used in this paper as a part of the compression algorithm. The SVD method applied to arbitrary matrix produces decomposition that consist of corresponding singular values and singular vectors. This process is fully reversible (with the assumption that the numerical errors are negligible). The original matrix can be reconstructed by the multiplication of decomposed parts. However, the compression algorithm is based on modification of decomposition to create low-rank approximation matrix. The reconstructed matrix slightly differs from the original matrix and algorithm therefore performs lossy compression.
 
 \subsection{Low-rank approximation matrix}
 
@@ -61,8 +65,6 @@ where $m$ and $n$ are dimensions of matrix $\mtrx{A}$. Explanation of the compre
 
 \subsection{Error estimation}
 \label{sec:error}
-
-The objective of data compression is to represent an input with smaller amount of data. However, the data reconstructed from its compressed representation may or may not be the exact copy of the original image. A compression technique can be lossy or lossless based on the quality of data it restores.
 
 Low-rank approximation matrix method that is described in this paper is a lossy compression technique. Several error metrics are used to control the quality of results \cite{SairaBanu2015}.
 
