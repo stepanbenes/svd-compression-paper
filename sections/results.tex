@@ -1,24 +1,26 @@
 \section{Results}
 \label{sec:results}
 
-The number of operations in the compression algorithm with respect to the number of the stored incremental or time steps (the number of rows in the matrix $\mtrx{A}$) is depicted in Figure \ref{fig:ExeTime_rows} while the number of operations with respect to the number of points, where the results are stored (the number of columns of the matrix $\mtrx{A}$), is depicted in Figure \ref{fig:ExeTime_columns}. Especially on Figure \ref{fig:ExeTime_columns} is clearly visible that the randomized SVD algorithm is much faster than the classical one.
+All procedures presented here were tested on a common PC having Intel Core i5-4690K @ 3.5GHz CPU with 16GB RAM, running on Microsoft Windows 10 64-bit operating system.
+
+The first benchmark was designed to measure computational complexity of the SVD decomposition algorithm. Series of 100 random matrices with standard distribution were generated and execution times were recorded and averaged. The execution time with respect to the number of the stored incremental or time steps (the number of rows in the matrix $\mtrx{A}$) is depicted in Figure \ref{fig:ExeTime_rows} while the execution time with respect to the number of points, where the results are stored (the number of columns of the matrix $\mtrx{A}$), is depicted in Figure \ref{fig:ExeTime_columns}. Especially in Figure \ref{fig:ExeTime_columns}, it is clearly visible that the randomized SVD algorithm is much faster than the classical one.
 
 These results confirm that the SVD implementation has computational complexity $\mathrm{O}(m^2n)$, where $m$ is number of rows, $n$ is number of columns, and $m < n$. In case of $m > n$ the complexity would be $\mathrm{O}(mn^2)$ as the algorithm takes advantage of non-squareness in that its complexity is quadratic only in the smaller dimension.
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/executionTime_varyingRows}
-\caption{Dependency of SVD execution time on number of rows of an input matrix (having fixed number of columns).}
+\caption{Dependency of SVD execution time on $m$ (having fixed $n = 10000$ and $r=min(m,n)$).}
 \label{fig:ExeTime_rows}
 \end{figure}
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/executionTime_varyingColumns}
-\caption{Dependency of SVD execution time on number of columns of an input matrix (having fixed number of rows).}
+\caption{Dependency of SVD execution time on $n$ (having fixed $m = 100$ and $r=min(m,n)$).}
 \label{fig:ExeTime_columns}
 \end{figure}
 
 % reactor containment
-Behavior of the compression strategy introduced is presented on three real world examples. First example is an analysis of aging of nuclear power plant's containment made from prestressed concrete. Finite element mesh used in this analysis is in Figure \ref{fig:temelin:mesh}. More details about the analysis can be found in \cite{Kruis2012} and \cite{Koudelka2009}. This analysis includes high number of analysis time steps (thousands) with very little differences between them. There is therefore potential for compression ratio to be very high as proven in Figure \ref{fig:temelin:NRMSD} that examines the impact of changes in the compression ratio to the mean error of approximation.
+Behavior of the compression strategy introduced is presented on three real world examples. First example is an analysis of aging of nuclear power plant's containment made from prestressed concrete. Finite element mesh used in this analysis is in Figure \ref{fig:temelin:mesh}. More details about the analysis can be found in \cite{Kruis2012} and \cite{Koudelka2009}. This analysis includes high number of analysis time steps (thousands) with very little differences between them. There is therefore potential for compression to be very effective (compression ratio to be very low) as proven in Figure \ref{fig:temelin:NRMSD} that examines the impact of changes in the compression ratio to the mean error of approximation.
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/temelin_screenshot}
@@ -28,7 +30,7 @@ Behavior of the compression strategy introduced is presented on three real world
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/temelin_NRMSD}
-\caption{Dependence of Normalized Rooted Mean Squared Deviation on Compression ratio for reactor containment analysis results.}
+\caption{Dependence of $\mathit{NRMSD}$ on $c$ for reactor containment analysis results.} % ...$c$ (and $r$)...
 \label{fig:temelin:NRMSD}
 \end{figure}
 
@@ -43,13 +45,13 @@ Figure \ref{fig:chotkova:mesh} shows results from an analysis of geological laye
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/chotkova_NRMSD}
-\caption{Dependence of Normalized Rooted Mean Squared Deviation on Compression ratio for results of geological layers project.}
+\caption{Dependence of $\mathit{NRMSD}$ on $c$ for results of geological layers project.}
 \label{fig:chotkova:NRMSD}
 \end{figure}
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/chotkova_MaxError}
-\caption{Dependence of Normalized Maximum Error on Compression ratio for results of geological layers project.}
+\caption{Dependence of $\mathit{NME}$ on $c$ for results of geological layers project.}
 \label{fig:chotkova:MaxError}
 \end{figure}
 
@@ -64,22 +66,22 @@ Figure \ref{fig:mechaxisym:mesh} contains visualization of results of two-dimens
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/mechaxisym_NRMSD}
-\caption{Dependence of Normalized Rooted Mean Squared Deviation on Compression ratio for reactor vessel analysis results.}
+\caption{Dependence of $\mathit{NRMSD}$ on $c$ for reactor vessel analysis results.}
 \label{fig:mechaxisym:NRMSD}
 \end{figure}
 
 % PSNR
-Figure \ref{fig:PSNR} summarizes the compression error for all three benchmarks using logarithmic scale to make the differences more visible. Peek signal to noise ratio ($\mathit{PSNR}$) metric is used (see Equation \ref{eq:psnr-def} for definition). Figure \ref{fig:PSNR_rand} contains the same comparison for the randomized SVD algorithm.
+Figure \ref{fig:PSNR} summarizes the compression error for all three benchmarks using logarithmic scale to make the differences more visible. Peek signal to noise ratio ($\mathit{PSNR}$) metric is used (see Equation (\ref{eq:psnr-def}) for definition). Figure \ref{fig:PSNR_rand} contains the same comparison for the randomized SVD algorithm.
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/PSNR}
-\caption{Comparison of Peek signal to noise ratio value calculated for different decompositions.}
+\caption{Comparison of $\mathit{PSNR}$ calculated for different decompositions.}
 \label{fig:PSNR}
 \end{figure}
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/PSNR_rand}
-\caption{Comparison of Peek signal to noise ratio value for different randomized decompositions.}
+\caption{Comparison of $\mathit{PSNR}$ for different randomized decompositions.}
 \label{fig:PSNR_rand}
 \end{figure}
 
@@ -88,11 +90,11 @@ Besides the error also the execution speed of compression algorithm was measured
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/temelin_ExecutionTime}
-\caption{Variation of execution time of standard and randomized decompositions calculated for reactor containment analysis results.}
+\caption{Variation of execution time of standard and randomized SVD decompositions calculated for reactor containment analysis results.}
 \label{fig:temelin:ExeTime}
 \end{figure}
 
-The memory consumption of compressed results for reactor containment analysis is summarized in Table \ref{tab:mem-consum}. For different values of compression ratio shows memory size in megabytes. In this benchmark the compression ratio $c$ is an input parameter to the compression algorithm. As follows from the equation (\ref{eq:rank-from-comp-ratio}), the value of the compression ratio directly affects the amount of singular values ought to be removed from the SVD decomposition. Size factor describes the final outcome of compression when compared to the original size.
+The memory consumption of compressed results for reactor containment analysis is summarized in Table \ref{tab:mem-consum}. For different values of compression ratio it shows memory size in megabytes. In this benchmark the compression ratio $c$ is an input parameter to the compression algorithm. As follows from the Equation (\ref{eq:rank-from-comp-ratio}), the value of the compression ratio directly affects the amount of singular values ought to be removed from the SVD decomposition. Size factor describes the final outcome of compression when compared to the original size.
 
 \begin{table}[H]
 \centering
