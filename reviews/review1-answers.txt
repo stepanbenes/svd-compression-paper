@@ -1,0 +1,41 @@
+Reviewer 1
+-- TODO
+
+
+Reviewer 2
+-- TODO
+
+
+Reviewer 3
+
+- Line 589: while NRMSD < e -> while NRMSD > e
+-- This line in algorithm description is correct. Each iteration the value of the variable NRMSD is getting bigger and the loop continues until the threshold e is reached or exceeded.
+
+- Line 656: These results confirm – where have been the results computed?
+-- We added description of the benchmark and also the hardware specification of the testing machine. Following text was added:
+
+"All procedures presented here were tested on a common PC having Intel Core i5-4690K @ 3.5GHz CPU with 16GB RAM, running on Microsoft Windows 10 64-bit operating system. The first benchmark was designed to measure computational complexity of the SVD decomposition algorithm. Series of 100 random matrices with standard distribution were generated and execution times were recorded and averaged."
+
+- Page 17: Normalized Maximum Error (NME) is not defined
+-- Definition of Normalized Maximum Error (NME) was added to Section 2.3 (Error estimation)
+
+-- All other comments were acknowledged and the paper was modified as suggested.
+
+
+Reviewer 4
+
+- References to compression ratio are confusing. It is defined as (SVD size) / (original size).
+-- The text in Section Results
+
+"Compression ratio c is an input parameter to the compression algorithm specifying amount of singular values ought to be removed..."
+
+was replaced with the following text:
+
+"In this benchmark, the compression ratio c is an input parameter to the compression algorithm. As follows from the equation (13), the value of compression ratio directly affects the amount of singular values ought to be removed from the SVD decomposition."
+
+- Line 122: Suggest: summary of sections at the end of Introduction
+-- Following text was added to the end of Introduction:
+
+"The rest of the paper is organized as follows. Section 2 contains math ematical background of the SVD compression (i.e. SVD method itself, its use in low-rank matrix approximation, and description of the randomized SVD method). Implementation of the compression algorithm is presented in Section 3. Section 4 summarizes the results of the benchmarks that were designed to measure quality of the output from the compression algorithm, and also the performance of its the implementation. The paper is concluded in Section 5."
+
+-- All other comments were acknowledged and the paper was modified as suggested.

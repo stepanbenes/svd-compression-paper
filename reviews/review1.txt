@@ -1,0 +1,367 @@
+- Reviewer 1
+
+- Review of paper "Singular Value Decomposition Used for Compression of Results from the Finite Element Method"
+
+This paper focuses on a compression of finite element data using the singular value decomposition approach. The method is described, details of the applied compression algorithm are given and the applicability and efficiency of the method is demonstrated on real data. Particularly, the presented algorithm is able to compress arbitrary data using low-rank approximation matrices. The main advantage of the presented compression algorithm is that the approximation error can be prescribed with a guarantee.
+
+On the other hand the SVD decomposition is very time-consuming operation. The authors pay attention to the so-called randomized version of the SVD decomposition algorithm, which is much faster.
+
+The paper is structured as follows. Aster a short introduction section, the mathematical background of the singular value decomposition method is presented including also the low-rank approximations, error estimation techniques and the so-calle randomized SVD approach. Section 3 is then devoted to the implementation details and section 4 presents the results of the method in the case of compression of finite element data of benchmarks. Section 5 presents conclusion.
+
+The paper presents very nice approach for compression of finite element data and its application in the post-processing of the FE results. This is of high importance for recent computations as the use of efficient computers leads to production of large results data, which needs to be efficiently stored and post-processed. In my opinion the authors present nice and probably new idea of using an sophisticated mathematical tool of SVD algorithm to compress the data (of course together with the apriori assumed information about the data characterization as FE data on same FE mesh). On the other hand the presentation suffers from several drawbacks. That is why I recommend to accept the paper provided that the following minor revisions are made.                                                                                          
+
+List of minor revisions:                                                                                                     
+
+1) Language should be thoroughly revised! There are lots of mistakes (missing definite/indefinite articles, etc, sometimes the subject is missing in the sentences). Check lines 70-72 (missing articles), line 76 (missing subject of the sentence), line 100 (capital F?), ...
+
+2) The authors should explain more clearly in the introduction what is the main novelty of the paper. It would be nice to include more detailed introduction (state of the art) explaining the different topics included (I see that only 5 citations out of 19 are made in the introduction, which is kind of strange).
+
+3) There is confusing mistake on line 138, the singular values of S are not eigenvalues of U and V!!!
+
+4) Seems that for equation (2) it is assumed that n < m(!), but it is never mentioned before. (?)
+
+5) line 379 " .... results will nearly span the range of A with extremely high probability"  is confusing in my opinion. Seems like it is not dependent on the number r.
+
+6) First paragraph of section 3 it is completely unclear and should be reformulated.
+
+
+
+- Reviewer 2
+
+- The paper deals with compression of results from FEM using Singular Value Decomposition. The methodology is well and very accurately described, including a detailed implementation. Authors present the use of randomized SVD as advanced and effective optimization method. Due to the incommensurability of the individual components of the solution, the decomposition is applied to each component particularly. For this reason, it is very convenient to use a normalized error estimation (NRMSD).
+
+Remarks:
+- Standard SVD is well described but I miss better explanation of randomized SVD
+- Figures 5, 7, 8: The error estimation decreasing very fast and therefore the graph is not clear. It would be good to use the logarithmic merit (as in Figures 11 and 12)
+
+
+
+-Reviewer 3
+
+- In the article the authors present an application of Singular Value Decomposition (SVD) to the compression of large amount of data arising from finite element solvers taking an inspiration from image compression.
+
+The focus is given on the algorithm’s performance as SVD is a very computational intensive method. The used method with better performance leading to lower memory consumption  with negligible compression error is the randomized SVD. Error estimation methods used during compression of finite element results are presented and their dependence on the compression ratio and given rank are illustrated by several numerical experiments .The paper is written in well understandable English. However, it could be improved as it is illustrated by following
+examples:
+
+Page 1:
+Line 29:
+then -> than
+
+Page 2:
+Line 76:
+In [1] is presented one possible direction -> In [1], there is presented one possible directionOR One possible direction is presented in [1]
+
+Page 3:
+Line 126:
+SVD is defined for the third time
+
+Line 138:
+the square roots of eigenvalues of U or V. -> the square roots of eigenvalues of AA^T or A^TA.
+
+Line 150:
+most variation -> the largest variation
+
+Page 4:
+Line 179:
+that consist -> that consists
+
+Line 189:
+From the definition of SVD in (1) and from the properties of SVD followsthe fact -> From the defi  nition of SVD in (1) and from the properties of SVD, the fact follows
+
+Line 191:
+as a sum of rank-1 matrices -> as a sum of n matrices
+
+Page 7:
+Line 344:
+In [10, 11, 12, 13] are described -> In [10, 11, 12, 13], there are described
+
+Page 8:
+Line 414:
+what does it mean „a nonnegative, diagonal matrix“?
+
+Line 416:
+algorithm requires O(mnlog k) – k is not defined, it should be r
+
+Line 425: As an example can serve temperature field -> As an example, the temperature field can serve
+
+Page 10:
+Line 518:
+in section 2.2. -> in Section 2.2.
+
+Page 11:
+Line 589:
+while NRMSD < e -> while NRMSD > e
+
+Page 12:
+Line 638:
+number of singular values and corresponding singular vectors is calculated -> number of singular values and corresponding singular vectors are calculated
+
+Line 642:
+size of SVD decomposition -> size of the SVD decomposition – „the“ is often missing
+
+Line 653:
+Especially on Figure 3 is clearly visible -> Especially in Figure 3, it is clearly visible
+
+Line 656:
+These results confirm – where have been the results computed?
+
+Page 13:
+Figure 2:
+Dependency of SVD execution time on number of rows of an input matrix (having fixed number of columns). -> Dependency of SVD execution time on m (having fixed n=… and r=… ). – the values of n and r are missing
+
+Page 14:
+Figure 3:
+Dependency of SVD execution time on number of columns of an input matrix (having fixed number of rows). -> Dependency of SVD execution time on n (having fixed m=… and r=… ). – the values of m and r are missing Line 764: compression ratio to be very high – c belongs to (0,1], 1 means no compression, so redefine the compression ratio
+
+Page 15:
+Figure 5:
+Dependence of Normalized Rooted Mean Squared Deviation on Compression ratio for reactor containment analysis results. -> Dependence of NRMSD on compressionratio c (and r) for reactor containment analysis results. Furthermore I would recommend to redraw the graph in logarithmic scale and add the second x-axis into the graph informing about r-values
+
+Line 832:
+based on theory plasticity. -> based on plasticity theory. OR based on theory of plasticity.
+
+Page 16:
+Line 849:
+this has negligible effect on quality of compression. – what is an impact of this negligible effect? It could be explained in more details.
+
+Page 17:
+I would recommend to merge Figure 7 and 8 into one figure, to use logarithmic scale again and to add second x-axis with r-values.I suggest the title of this figure: Dependence of NRMSD and NME on c and r for results of geological layers project. Normalized Maximum Error (NME) is not defined
+
+Page 19:
+Figure 10:
+Dependence of Normalized Rooted Mean Squared Deviation on Compression ratio for reactor vessel analysis results. -> Dependence of NRMSD on c and r for reactor vessel analysis results. I would recommend to redraw the graph in logarithmic scale add the second axis into the graph informing about r-values.
+
+Line 1035:
+Figure 11 summarizes the compression error for all three benchmarks using logarithmic scale – it is confusing as PSNR is defined using logarithm and the reader could expect logarithmic scale on y-axis, explain in more details
+
+Line 1037:
+see Equation 9 -> see Equation (9)
+
+Figure 12 contains the same comparison for the randomized SVD algorithm. -> Figure 12 contains the same information for the randomized SVD algorithm.
+– comparison should be between Figs. 11 and 12
+
+Figure 11:
+Comparison of Peek signal to noise ratio value calculated for different decompositions. -> Dependence of PSNR value on c and r calculated for different SVD
+decompositions.The graph contains the legend with names of benchmarks, which are not decribed. Add the second x-axis into the graph informing about r-values. 
+
+Page 20:
+Figure 12:
+Comparison of Peek signal to noise ratio value for different randomized decompositions. -> Dependence of PSNR value on c and r calculated for different randomized  SVD decompositions.The graph contains the legend with names of benchmarks, which are not decribed. Add the second x-axis into the graph informing about r-values.
+
+Line 1092:
+In Figure 13 is comparison -> In Figure 13, there is comparison
+
+Page 21:
+Figure 13:
+Variation of execution time of standard and randomized decompositions calculated for reactor containment analysis results. -> Variation of execution time of standard and randomized SVD decompositions calculated for reactor containment analysis results.
+
+Is it necessary to report 17 times for full SVD decomposition? (blue bars)
+
+Now, there is rank as x-axis, in previous graphs there was c. I would recommend two x-axes: r and c. What should be r=0?
+
+Line 1154:
+For different values of compression ratio shows  -> For different values of compression ratio it shows
+
+Line 1157:
+from the equation (12). -> from the Equation (12).
+
+Page 22:
+Line 1185:
+the use of SVD decomposition -> the use of the SVD decomposition 
+
+Line 1203:
+Other complication -> Another complication
+
+
+
+- Reviewer 4
+
+- This paper presents use of SVD decomposition for compression of FEM results. This topic is relatively interesting. Use of SVD for data compression is well-known but here it is used in a non-standard context of FEM analysis. More interesting is the presented randomized SVD approach which can save a lot of execution time. Mainly the section about numerical results should be more elaborated to improve clarity. The paper deserves numerous minor corrections and improvements, described more in detail below.
+
+Major comments:
+References to compression ratio are confusing. It is defined as (SVD size) / (original size)
+
+A key requirement for THE implementation
+
+Line 157:
+THE data transfer
+
+Line 160:
+A compression method
+
+Line 178:
+as A part of; THE SVD method
+
+Line 207:
+The quality -> Quality (uncountable)
+
+Line 414:
+nonnegative diagonal (remove comma)
+
+Line 464:
+matrix A, the compression (add comma)
+
+Line 468:
+applicable, the parameter (add comma)
+
+Line 473:
+results, this inequality (add comma)
+
+Line 480:
+calculated, the compression (add comma)
+
+Line 512:
+case, the most (add comma)
+
+Line 515:
+error, the Normalized (add comma)
+
+Line 520:
+error, the interesting (add comma)
+
+Line 528:
+THE matrix A
+
+Line 603:
+THE execution time on THE varying
+
+Line 632:
+THE randomized SVD
+
+Line 642:
+S, being a diagonal matrix, can be (suggest adding commas)
+
+Line 643:
+values s_i, or can (suggest adding comma)
+
+Line 649:
+number of THE stored
+
+Line 1092:
+In Figure 13, there is a comparison
+
+Line 1188:
+THE compression algorithm; THE results of its
+
+Line 1191:
+set to 10^{-5}, then (add comma)
+
+Line 1193:
+THE compression algorithm
+
+Line 1198:
+decomposition is A very
+
+Line 1200:
+Also, THE randomized version
+
+Line 1201:
+the slight -> a slight
+
+Line 1203:
+use A special format
+
+Line 1204:
+decomposition, and the post-processor (add comma)
+
+Line 1206:
+in A usual case
+
+
+Other minor comments/suggestions:
+
+Abstract:
+can not -> cannot
+
+Abstract:
+lower memory consumption, 10% of the original size or lower -> lower memory consumption, 10% of the original size or LESS
+
+Line 75:
+weird word order,
+suggest: In [1], one possible direction for research in this area is presented / In [1], there is one … presented for research in this area
+
+Line 79:
+The focus is on geometry – I don’t understand meaning of that sentence, it should be removed or reformulated
+
+Line 83:
+class of functions -> classes of functions
+
+Line 83:
+not applicable to problem in general – suggest: not applicable to general problems / a general problem
+
+Line 101:
+method that yields – suggest: method ITSELF that yields
+
+Line 120:
+benchmarks for … algorithm – suggest: benchmarks in this paper
+
+Line 122:
+suggest summary of sections at the end of Introduction
+
+Line 137:
+singular values … are … square roots of eigenvalues U or V – that’s not true, it should be A^TA or AA^T.
+
+Additionally, the meaning of “or” is unclear here. In fact, the eigenvalues are the same except that the multiplicity of zero differs.
+
+Line 141:
+identifying and ordering … variation -> ordering the dimensions based on variation and identifying the dimension with the largest/greatest variation
+
+Line 143:
+Once it has been identified where the most variation is -> Once this dimension is identified
+
+Line 150:
+most variation -> the largest/greatest variation
+
+Line 154:
+starting this line, the text does not fit into “Mathematical background”, I suggest a new section, e.g. SVD compression.
+
+Line 159:
+usually – suggest sometimes
+
+Line 160:
+suggest removing “based on quality … representation” – it seems to be redundant.
+
+Line 178:
+suggest: SVD is used here/in this paper
+
+Line 256–261:
+The paragraph starting with “The objective of data …” is redundant, repeating earlier facts, and does not fit to the section name. I suggest removing it.
+
+Line 425:
+comma after “example”, move “can serve” to the end of the sentence
+
+Line 464:
+Then from the formula (4) follows -> Then it follows from the formula (4)
+
+Line 464:
+equals to -> equals / is equal to
+
+Line 483:
+how to get the number of singular values to be preserved – suggest simplifying: how to preserve the number of singular values
+
+Line 517:
+enables to work -> enables us to work / enables working
+
+Line 575:
+reasonable quality -> desired quality
+
+Line 626:
+split into -> divided into
+
+Line 659:
+complexity is only linear in greater – “only” is quite confusing here, suggest either removing it, or rewriting: “complexity is quadratic only in the smaller dimension”
+
+Line 831:
+theory OF plasticity
+
+Line 1096:
+ahead of time -> ahead
+
+Line 1190:
+If … then – suggest replacing by When …
+
+Line 1203:
+Other complication -> Another complication
+
+Line 1208:
+“partial” is confusing, remove
