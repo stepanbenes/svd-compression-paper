@@ -3,7 +3,7 @@
 
 All procedures presented here were tested on a common PC having Intel Core i5-4690K @ 3.5GHz CPU with 16GB RAM, running on Microsoft Windows 10 64-bit operating system.
 
-The first benchmark was designed to measure computational complexity of the SVD decomposition algorithm. Series of 100 random matrices with standard distribution were generated and execution times were recorded and averaged. The execution time with respect to the number of the stored incremental or time steps (the number of rows in the matrix $\mtrx{A}$) is depicted in Figure \ref{fig:ExeTime_rows} while the execution time with respect to the number of points, where the results are stored (the number of columns of the matrix $\mtrx{A}$), is depicted in Figure \ref{fig:ExeTime_columns}. Especially in Figure \ref{fig:ExeTime_columns}, it is clearly visible that the randomized SVD algorithm is much faster than the classical one.
+The first benchmark was designed to measure computational complexity of the SVD algorithm. Series of 100 random matrices with standard distribution were generated and execution times were recorded and averaged. The execution time with respect to the number of the stored incremental or time steps (the number of rows in the matrix $\mtrx{A}$) is depicted in Figure \ref{fig:ExeTime_rows} while the execution time with respect to the number of points, where the results are stored (the number of columns of the matrix $\mtrx{A}$), is depicted in Figure \ref{fig:ExeTime_columns}. Especially in Figure \ref{fig:ExeTime_columns}, it is clearly visible that the randomized SVD algorithm is much faster than the classical one.
 
 These results confirm that the SVD implementation has computational complexity $\mathrm{O}(m^2n)$, where $m$ is number of rows, $n$ is number of columns, and $m < n$. In case of $m > n$ the complexity would be $\mathrm{O}(mn^2)$ as the algorithm takes advantage of non-squareness in that its complexity is quadratic only in the smaller dimension.
 
@@ -90,11 +90,11 @@ Besides the error also the execution speed of compression algorithm was measured
 
 \begin{figure}[H]
 \centering\includegraphics[width=\textwidth]{figures/temelin_ExecutionTime}
-\caption{Variation of execution time of standard and randomized SVD decompositions calculated for reactor containment analysis results.}
+\caption{Variation of execution time of standard and randomized SVD calculated for reactor containment analysis results.}
 \label{fig:temelin:ExeTime}
 \end{figure}
 
-The memory consumption of compressed results for reactor containment analysis is summarized in Table \ref{tab:mem-consum}. For different values of compression ratio it shows memory size in megabytes. In this benchmark, the compression ratio $c$ is an input parameter to the compression algorithm. As follows from the Equation (\ref{eq:rank-from-comp-ratio}), the value of the compression ratio directly affects the amount of singular values ought to be removed from the SVD decomposition. Size factor describes the final outcome of compression when compared to the original size.
+The memory consumption of compressed results for reactor containment analysis is summarized in Table \ref{tab:mem-consum}. For different values of compression ratio it shows memory size in megabytes. In this benchmark, the compression ratio $c$ is an input parameter to the compression algorithm. As follows from the Equation (\ref{eq:rank-from-comp-ratio}), the value of the compression ratio directly affects the amount of singular values ought to be removed from the SVD. Size factor describes the final outcome of compression when compared to the original size.
 
 \begin{table}[H]
 \centering
