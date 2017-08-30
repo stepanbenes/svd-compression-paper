@@ -1,0 +1,60 @@
+# Reviewer 1
+- `TODO`
+
+
+# Reviewer 2
+- `TODO`
+
+
+# Reviewer 3
+
+- Line 589: while NRMSD < e -> while NRMSD > e
+
+This line in algorithm description is correct. Each iteration the value of the variable NRMSD is getting bigger and the loop continues until the threshold e is reached or exceeded.
+
+- Line 656: These results confirm � where have been the results computed?
+
+We added description of the benchmark and also the hardware specification of the testing machine. Following text was added:
+
+```All procedures presented here were tested on a common PC having Intel Core i5-4690K @ 3.5GHz CPU with 16GB RAM, running on Microsoft Windows 10 64-bit operating system. The first benchmark was designed to measure computational complexity of the SVD decomposition algorithm. Series of 100 random matrices with standard distribution were generated and execution times were recorded and averaged.```
+
+- Page 17: Normalized Maximum Error (NME) is not defined
+
+Definition of Normalized Maximum Error (NME) was added to Section 2.3 (Error estimation)
+
+All other comments were acknowledged and the paper was modified as suggested.
+
+
+# Reviewer 4
+
+- References to compression ratio are confusing. It is defined as (SVD size) / (original size).
+
+The text in Section Results
+
+```Compression ratio c is an input parameter to the compression algorithm specifying amount of singular values ought to be removed...```
+
+was replaced with the following text:
+
+```In this benchmark, the compression ratio c is an input parameter to the compression algorithm. As follows from the equation (13), the value of compression ratio directly affects the amount of singular values ought to be removed from the SVD decomposition.```
+
+- Line 122: Suggest: summary of sections at the end of Introduction
+
+Following text was added to the end of Introduction:
+
+```The rest of the paper is organized as follows. Section 2 contains math ematical background of the SVD compression (i.e. SVD method itself, its use in low-rank matrix approximation, and description of the randomized SVD method). Implementation of the compression algorithm is presented in Section 3. Section 4 summarizes the results of the benchmarks that were designed to measure quality of the output from the compression algorithm, and also the performance of its the implementation. The paper is concluded in Section 5.```
+
+All other comments were acknowledged and the paper was modified as suggested.
+
+
+JK:
+
+- We have checked the first paragraph of section 3 but unfortunately we do not understand the source of unclarity. We will be grateful to the reviewer 1 for more detailed comment to this paragraph.
+
+- objection 5 of the reviewer 1: Approximation of the matrix A depends definitely on the number r which is the rank of the approximation of A. 
+The higher r, the better approximation. All approximations of A with the rank r are not identical. We are looking for the approximation which is the best one. The quality of approximation can be measured by the probability of incidence of a random vector \tilde{U}\tilde{S}\tilde{V}^Tv in the range of the matrix A, where v denotes a random vector.
+
+- It should be emphasized that Algorithm 1 summarizes a pseudo-code, where the desired approximation is obtained from the full SVD, i.e. the particular singular values with appropriate singular vectors are removed from the factorization and therefore the error NRMSD of the approximation growths.
+
+- line 849: ... it has negligible effect (about ???%, treba 5 %) on the quality ....
+
+- figure 13: We include the columns indicating the full SVD fo Figure 13 in order to show the advantage of randomized SVD and to show the nearly constant computation time for the full SVD.
