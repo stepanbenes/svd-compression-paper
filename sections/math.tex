@@ -1,9 +1,7 @@
 \section{Mathematical background}
 \label{sec:math}
 
-% Singular Value Decomposition in general
-
-Singular value decomposition \cite{Baker2005, Kalman1996, Golub1996} is based on a theorem from linear algebra which says that a rectangular matrix $\mtrx{A} \in \mathbb{R}^{m \times n}$ can be decomposed into the product of three matrices - an orthogonal matrix $\mtrx{U} \in \mathbb{R}^{m \times m}$, a diagonal
+Singular value decomposition is based on a theorem from linear algebra which says that a rectangular matrix $\mtrx{A} \in \mathbb{R}^{m \times n}$ can be decomposed into the product of three matrices - an orthogonal matrix $\mtrx{U} \in \mathbb{R}^{m \times m}$, a diagonal
 matrix $\mtrx{S} \in \mathbb{R}^{m \times n}$, and the transpose of an orthogonal matrix $\mtrx{V} \in \mathbb{R}^{n \times n}$:
 
 \begin{equation}
@@ -13,8 +11,6 @@ matrix $\mtrx{S} \in \mathbb{R}^{m \times n}$, and the transpose of an orthogona
 
 \noindent
 where $\mtrx{U^\mathsf{T}U} = \mtrx{I}$, $\mtrx{V^\mathsf{T}V} = \mtrx{I}$. The columns of $\mtrx{U}$ are orthonormal eigenvectors of $\mtrx{AA^\mathsf{T}}$, which are called the left singular vectors. The columns of $\mtrx{V}$ are orthonormal eigenvectors of $\mtrx{A^\mathsf{T}A}$ called the right singular vectors. $\mtrx{S}$ (sometimes referred to as $\mtrx{\Sigma}$) is a diagonal matrix containing singular values in descending order, which are at the same time the nonzero square roots of the eigenvalues of $\mtrx{AA^\mathsf{T}}$ and $\mtrx{A^\mathsf{T}A}$.
-
-% The singular values are the nonzero square roots of the eigenvalues from AAT and ATA. The eigenvectors of AAT are called the \left" singular vectors (U) while the eigenvectors of ATA are the right" singular vectors (V).
 
 SVD can be seen as a method for transforming correlated variables into a set of uncorrelated ones. At the same time, SVD is a method for ordering the dimensions based on variation and identifying the dimension with the largest variation. Once this dimension is identified, it is possible to find the best approximation of the original data points using fewer dimensions. Hence, SVD can be seen as a method for data reduction/compression.
 
@@ -30,22 +26,22 @@ SVD is used in this paper as a part of the compression algorithm. The SVD method
 
 \subsection{Low-rank approximation matrix}
 
-From the definition of SVD in (\ref{eq:svd-def}) and from the properties of SVD, the fact follows that a matrix can be represented in the form of its SVD components as a sum of $p$ rank-1 matrices
+From the definition of SVD in (\ref{eq:svd-def}) and from the properties of SVD, the fact follows that a matrix can be represented in the form of its SVD components as a sum of $k$ rank-1 matrices
 
 \begin{equation}
-\mtrx{A}=\sum_{i=1}^{p} s_{i}\mathbf{u}_{i}\mathbf{v}_{i}^{\mathsf{T}},
+\mtrx{A}=\sum_{i=1}^{k} s_{i}\mathbf{u}_{i}\mathbf{v}_{i}^{\mathsf{T}},
 \label{eq:svd-expansion}
 \end{equation}
 
 \noindent
-where $s_i$ is the $i$-th singular value of matrix $\mtrx{A}$, $\mathbf{u}_i$ and $\mathbf{v}_i$ are corresponding singular vectors of matrix $\mtrx{A}$, and $p = \mathrm{min}(m, n)$. Considering the fact that singular values are ordered $s_{1} \geq s_{2} \geq s_{3} \geq ... \geq s_{p}$, the above formula implies that the first term of the sum would have the highest contribution and the last term would have the lowest contribution to matrix~$\mtrx{A}$. Therefore, if we take only first $r$ members of the above summation we get an approximation matrix
+where $s_i$ is the $i$-th singular value of matrix $\mtrx{A}$, $\mathbf{u}_i$ and $\mathbf{v}_i$ are corresponding singular vectors of matrix $\mtrx{A}$, and $k = \mathrm{min}(m, n)$. Considering the fact that singular values are ordered $s_{1} \geq s_{2} \geq s_{3} \geq ... \geq s_{k}$, the above formula implies that the first term of the sum would have the highest contribution and the last term would have the lowest contribution to matrix~$\mtrx{A}$. Therefore, if we take only first $r$ members of the above summation we get an approximation matrix
 
 \begin{equation}
 \mtrx{A'}=\sum_{i=1}^{r} s_{i}\mathbf{u}_{i}\mathbf{v}_{i}^{\mathsf{T}}.
 \label{eq:svd-approx-expansion}
 \end{equation}
 
-Quality of approximation depends on the magnitude of the singular values omitted from the approximation formula, namely $s_{r+1} ...  s_{p}$. The compression algorithm is based on an assumption that the first singular value is order-of-magnitude higher than singular values at the end of the decomposition sequence. In special cases, when $r=p$, or $s_{i}=0$ for all $i > r$, the omitted singular values do not contribute to the sum and the compression is therefore lossless. In other cases, approximation error has to be calculated and taken into account to avoid loss of important details in data.
+Quality of approximation depends on the magnitude of the singular values omitted from the approximation formula, namely $s_{r+1} ...  s_{k}$. The compression algorithm is based on an assumption that the first singular value is order-of-magnitude higher than singular values at the end of the decomposition sequence. In special cases, when $r=k$, or $s_{i}=0$ for all $i > r$, the omitted singular values do not contribute to the sum and the compression is therefore lossless. In other cases, approximation error has to be calculated and taken into account to avoid loss of important details in data.
 
 The main goal of the compression algorithm is to find a compromise between low approximation error and high compression ratio $c$ which is calculated using the formula
 
@@ -66,7 +62,7 @@ where $m$ is the number of rows and $n$ is the number of columns of matrix $\mtr
 \subsection{Error estimation}
 \label{sec:error}
 
-Low-rank approximation matrix method that is described in this paper is a lossy compression technique. Several error metrics are used to control the quality of results \cite{SairaBanu2015}.
+Low-rank approximation matrix method that is described in this paper is a lossy compression technique. Several error metrics are used to control the quality of results.
 
 \begin{itemize}
 
@@ -120,6 +116,9 @@ $\mathit{PSNR}$ is most commonly used to measure the quality of reconstruction o
 
 The exact SVD of a $m \times n$ matrix has computational complexity \newline $\mathrm{O}(\mathrm{min}(mn^2, m^2n))$ using the "big-O" notation. When applied on large data sets it tends to be very time-consuming. In \cite{Candes2011, Woolfe2008, Martinsson2011, Szlam2014}, there are described randomized methods for constructing approximate matrix factorizations which offer significant speedups over classical methods.
 
+% TODO: remove the 4 citations; pridat obecne kecy, v jakych oblastech se toto da a neda pouzit - tutorial page 5
+% https://stats.stackexchange.com/questions/159325/what-fast-algorithms-exist-for-computing-truncated-svd - ruzne pristupy k vypoctu SVD
+
 The particular implementation of the randomized decomposition is based on the algorithm described in \cite{Halko2011}. The authors proposed an algorithm for efficient computation of low-rank approximation to a given matrix. The algorithm can be split into two main computational stages.
 
 The first stage is to construct a low-dimensional subspace that captures the action of the matrix. To be more formal, this stage is to compute an approximate basis for the range of the input matrix $\mtrx{A}$. This basis matrix $\mtrx{Q}$ is required to have orthonormal columns and
@@ -152,3 +151,11 @@ $\mtrx{A}$ is then decomposed as
 
 \noindent
 The algorithm produces matrices $\mtrx{\widetilde{U}}$ and $\mtrx{\widetilde{V}}$ with orthonormal columns being approximations of the left and the right singular vectors of matrix $\mtrx{A}$, and a nonnegative diagonal matrix $\mtrx{\widetilde{S}}$ that contains approximations of the first $r$ singular values of matrix $\mtrx{A}$. For a dense input matrix, randomized SVD algorithm requires $\mathrm{O}(mn \log{r})$ floating-point operations, substantially less than classical algorithms.
+
+% TODO: last sentence put in new paragraph
+% Error estimators: tutorial Page 12
+% Power iterations: research-fb
+
+% TODO: explain gain in operation complexity (see tutorial page 13)
+
+% do answers napsat, ze jsme doplnili ty a ty odstavce, ale ze nehodlame vice vysvetlovat samotny randomized algoritmus, protoze jeho implementace neni predmetem paperu

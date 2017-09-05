@@ -34,15 +34,13 @@ In a usual case, the most important measure to take into account is the approxim
 
 To effectively calculate the final rank of the approximation matrix from the desired approximation error, the interesting property of singular values
 
-% TODO: Reference to source or further explanation needed. (prof. Marek?)
-
 \begin{equation}
 \sum_{i=1}^{m} \sum_{j=1}^{n} (a_{ij})^{2} = \sum_{i=1}^{k}{s_{i}^{2}},
 \label{eq:elem-sqr-sigma-sqr}
 \end{equation}
 
 \noindent
-where $k=min(m, n)$, i.e. the smallest of two dimensions of the matrix $\mtrx{A}$, is made use of. The above formula states that the sum of squared elements of the matrix $\mtrx{A}$ equals to the sum of squared singular values $s_{i}$ of the same matrix $\mtrx{A}$.
+where $k=\mathrm{min}(m, n)$, i.e. the smallest of two dimensions of the matrix $\mtrx{A}$, is made use of. The above formula states that the sum of squared elements of the matrix $\mtrx{A}$ equals to the sum of squared singular values $s_{i}$ of the same matrix $\mtrx{A}$.
 
 Using formulas \eqref{eq:svd-expansion} and \eqref{eq:svd-approx-expansion} the equation \eqref{eq:elem-sqr-sigma-sqr} can be applied to the difference between original matrix $\mtrx{A}$ and approximation matrix $\mtrx{A'}$
 
@@ -54,7 +52,6 @@ Using formulas \eqref{eq:svd-expansion} and \eqref{eq:svd-approx-expansion} the 
 where the term on the right-hand side is the sum of squares of those singular values of the matrix $\mtrx{A}$ that are going to be cut away by the compression algorithm. The equation can be rewritten using the definition of $\mathit{MSE}$ in \eqref{eq:mse-def} to
 
 \begin{equation}
-%MSE \times m n = s_{r+1}^{2} + s_{r+2}^{2} + ... + s_{k-1}^{2} + s_{k}^2
 \mathit{MSE} \times m n = \sum_{i=r+1}^{k} s_{i}^{2}
 \end{equation}
 
@@ -62,7 +59,6 @@ where the term on the right-hand side is the sum of squares of those singular va
 and using \eqref{eq:nrmsd-def} further to
 
 \begin{equation}
-%(NRMSD \times (X_{max}-X_{min}))^{2} \times m n = s_{r+1}^{2} + s_{r+2}^{2} + ... + s_{k-1}^{2} + s_{k}^2.
 (\mathit{NRMSD} \times (X_{max}-X_{min}))^{2} \times m n = \sum_{i=r+1}^{k} s_{i}^{2}.
 \end{equation}
 
@@ -97,8 +93,6 @@ to test whether the desired rank has been reached; $e$ is $\mathit{NRMSD}$ used 
 
 \subsection{Optimization}
 
-% http://mathoverflow.net/questions/161252/what-is-the-time-complexity-of-truncated-svd
-
 Computational complexity of the exact SVD algorithm is $\mathrm{O}(m^2n)$, where $m<n$. This theoretical algorithm complexity is confirmed by two benchmarks where the dependency of the execution time on the varying matrix dimension is shown. The results of the benchmarks are depicted in Figure \ref{fig:ExeTime_rows} and Figure \ref{fig:ExeTime_columns}. Several observations were made from the results:
 
 \begin{itemize}
@@ -108,5 +102,3 @@ Computational complexity of the exact SVD algorithm is $\mathrm{O}(m^2n)$, where
 \end{itemize}
 
 Storage size of the SVD itself can also be optimized. $\mtrx{S}$, being a diagonal matrix, can be stored as single list of singular values $s_{i}$, or can be even multiplied with the matrix of left singular vectors $\mtrx{U}$.
-
-% main features for optimization: key time steps (time step span compression), Randomized SVD, Parallelization, Sparse matrix of details, prenasobeni U matice singularnimi cisly, trochu usetrim pamet, mohu pouzit vzorkovani...
