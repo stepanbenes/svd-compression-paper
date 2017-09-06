@@ -148,16 +148,3 @@ $\mtrx{A}$ is then decomposed as
 
 \noindent
 The algorithm produces matrices $\mtrx{\widetilde{U}}$ and $\mtrx{\widetilde{V}}$ with orthonormal columns being approximations of the left and the right singular vectors of matrix $\mtrx{A}$, and a nonnegative diagonal matrix $\mtrx{\widetilde{S}}$ that contains approximations of the first $r$ singular values of matrix $\mtrx{A}$. For a dense input matrix, randomized SVD algorithm requires $\mathrm{O}(mn \log{r})$ floating-point operations, substantially less than classical algorithms.
-
-% In fact, it is sometimes possible to perform matrix approximation with a single pass over the data.
-
-%If the rank $r$ is not known in advance, it is possible to incorporate error estimators, that allow to determine rank based on estimated error. They can also improve robustness and reliability of the randomized method.
-
-
-% TODO: last sentence put in new paragraph
-% Error estimators: tutorial Page 12
-% Power iterations: research-fb
-
-% TODO: explain gain in operation complexity (see tutorial page 13)
-
-% do answers napsat, ze jsme doplnili ty a ty odstavce, ale ze nehodlame vice vysvetlovat samotny randomized algoritmus, protoze jeho implementace neni predmetem paperu. Take zminit, ze byla rozsirena sekce Introduction, aby vse bylo v kontextu.
