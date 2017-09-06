@@ -12,11 +12,11 @@ Section Introduction was extended with summarization of included topics. Several
 
 ```Compression methods usually yield approximated data. In the following text, the term approximation error denotes an error resulted from compression, i.e. difference between original results of FEM analysis and their compressed form. It should not be confused with the error of the Finite Element Method itself that yields approximate solution to mathematical problems used to model physical reality. To quantify the approximation error, several error metrics were investigated. In [7], there are some of them used in similar area of research. The ability to control the quality of compression was a key requirement for the implementation of the compression algorithm.```
 
-```The quality of any compression method depends on the nature of input data. Therefore, several different non-trivial finite element analyses should be used as benchmarks for an implementation of the compression algorithm. Also, the size of input data (the output from the FEM analysis) should be large enough to test the algorithmic complexity under heavy load. Details about the analyses that were used as benchmarks can be found in [8, 9, 10, 11].```
+```The quality of any compression method depends on the nature of input data. Therefore, several different non-trivial finite element analyses should be used as benchmarks for an implementation of the compression algorithm. Also, the size of input data (the output from the FEM analysis) should be large enough to test the algorithmic complexity under heavy load. Details about the analyses that were used as benchmarks can be found in [8, 9, 10, 11].```
 
-```Performance is very important aspect for development of the compression algorithm. SVD being very computational intensive, randomized algorithms for SVD decomposition were investigated [12, 13, 14, 15]. Especially, the implementation described in [16] was used in the compression algorithm for the optimization. Memory consumption and the suitable format of the output data from the compression algorithm also in uence overall usability of the resulting work. Ecient data storage is connected with data structure [17, 18]. This area will be subject of further research.```
+```Performance is very important aspect for development of the compression algorithm. SVD being very computational intensive, randomized algorithms for SVD decomposition were investigated [12, 13, 14, 15]. Especially, the implementation described in [16] was used in the compression algorithm for the optimization. Memory consumption and the suitable format of the output data from the compression algorithm also influence overall usability of the resulting work. Efficient data storage is connected with data structure [17, 18]. This area will be subject of further research.```
 
-```Although the idea to use SVD for data compression is not new, it is applied in an entirely new area of post-processing of results from the FEM analysis. In contrast with image compression, where the SVD was used in a lossy compression algorithms, the area of post-processing puts great emphasis on the mathematical accuracy of the aproximation instead of the human perceptions of visualizations. Also, the storage and dimensions of the input data, and the variance of the values in data, are very different. The main contribution of this paper is therefore to explore this area and to offer a description of an implementation of the algorithm that is successfully used in the post-processing of large data.```
+```Although the idea to use SVD for data compression is not new, it is applied in an entirely new area of post-processing of results from the FEM analysis. In contrast with image compression, where the SVD was used in a lossy compression algorithms, the area of post-processing puts great emphasis on the mathematical accuracy of the approximation instead of the human perceptions of visualizations. Also, the storage and dimensions of the input data, and the variance of the values in data, are very different. The main contribution of this paper is therefore to explore this area and to offer a description of an implementation of the algorithm that is successfully used in the post-processing of large data.```
 
 ```The rest of the paper is organized as follows. Section 2 contains mathematical background of the SVD compression (i.e. SVD method itself, its use in low-rank matrix approximation, and description of the randomized SVD method). Implementation of the compression algorithm is presented in Section 3. Section 4 summarizes the results of the benchmarks that were designed to measure quality of the output from the compression algorithm, and also the performance of its the implementation. The paper is concluded in Section 5.```
 
@@ -47,9 +47,9 @@ The following paragraphs were added to section about randomized SVD to better in
 
 ```There are many algorithms with different approaches to compute singular value decompositions. One approach is based on diagonalization of the matrix which essentially yields the whole decomposition at the same time. The other approach is the use of an iterative algorithm that yields one or several singular values at a time and can be stopped after desired number of singular values and vectors has been computed. Although these algorithms have proven to work very well for relatively small matrices, they are not well suited for using with large data sets. The exact SVD of a m x n matrix has computational complexity O(min(mn^2,m^2n)) using the \big-O" notation. When applied on large data sets it tends to be very time-consuming. Also, the implementation on modern hardware environment. As these algorithms often need random access to the memory where the input matrix is stored, it can increase communication between different levels in memory hierarchy, which causes higher latency when accessing data. From a numerical linear algebra perspective, an additional problem resulting from increasing matrix sizes is that noise in the data, and propagation of rounding errors, become increasingly problematic.```
 
-```In [12, 13, 14, 15], there are described randomized methods for constructing approximate matrix factorizations which offer signicant speedups over classical methods. The particular implementation of the randomized decomposition is based on the algorithm described in [16]. The authors proposed an algorithm for effcient computation of low-rank approximation to a given matrix. The method uses random sampling to identify a subspace that captures most of the action of a matrix. The input matrix is compressed to this subspace, and deterministic manipulations are then used to obtain the desired low-rank factorization. For a matrix that is too large to t in fast memory, the randomized techniques require only a constant number of passes over the data, as opposed to O(k) passes for classical algorithms.```
+```In [12, 13, 14, 15], there are described randomized methods for constructing approximate matrix factorizations which offer significant speedups over classical methods. The particular implementation of the randomized decomposition is based on the algorithm described in [16]. The authors proposed an algorithm for efficient computation of low-rank approximation to a given matrix. The method uses random sampling to identify a subspace that captures most of the action of a matrix. The input matrix is compressed to this subspace, and deterministic manipulations are then used to obtain the desired low-rank factorization. For a matrix that is too large to t in fast memory, the randomized techniques require only a constant number of passes over the data, as opposed to O(k) passes for classical algorithms.```
 
-Also, we would like to emphasize the fact, that the main novelty of the paper is not the implementation of the randomized SVD algorithm. We rather use the existing implementations as an optimization to our compression algorithm. For better explanation of this topic we reffer to the literature, especially to [16] that contains very thorough explanation of the randomization approach.
+Also, we would like to emphasize the fact, that the main novelty of the paper is not the implementation of the randomized SVD algorithm. We rather use the existing implementations as an optimization to our compression algorithm. For better explanation of this topic we refer to the literature, especially to [16] that contains very thorough explanation of the randomization approach.
 
 * Figures 5, 7, 8: The error estimation decreasing very fast and therefore the graph is not clear. It would be good to use the logarithmic merit (as in Figures 11 and 12)
 
@@ -74,7 +74,7 @@ The language was completely revised. Missing articles, commas, wrong word order,
 
 Description of the benchmark was added:
 
-```The rst benchmark was designed to measure computational complexity of the SVD algorithm. Series of 100 random matrices with standard distribution were generated and execution times were recorded and averaged. The execution time with respect to the number of the stored incremental or time steps (the number of rows in the matrix A) is depicted in Figure 2 while the execution time with respect to the number of points, where the results are stored (the number of columns of the matrix A), is depicted in Figure 3. ...```
+```The first benchmark was designed to measure computational complexity of the SVD algorithm. Series of 100 random matrices with standard distribution were generated and execution times were recorded and averaged. The execution time with respect to the number of the stored incremental or time steps (the number of rows in the matrix A) is depicted in Figure 2 while the execution time with respect to the number of points, where the results are stored (the number of columns of the matrix A), is depicted in Figure 3. ...```
 
 Also, the hardware specification of the testing machine was appended. Following text was added:
 
@@ -86,7 +86,7 @@ The graphs in figures 5, 7, 8, and 10 were redrawn in logarithmic scale. Also, t
 
 * Page 17: I would recommend to merge Figure 7 and 8 into one figure, to use logarithmic scale again and to add second x-axis with r-values.
 
-Unfortunatelly, it is not possible to do the both - merge the figures and add secondary x-axes as each figure has different range of r-values. The figures were therefore kept separated and secondary x-axes were added.
+Unfortunately, it is not possible to do the both - merge the figures and add secondary x-axes as each figure has different range of r-values. The figures were therefore kept separated and secondary x-axes were added.
 
 * Page 16: Line 849: this has negligible effect on quality of compression. – what is an impact of this negligible effect? It could be explained in more details.
 
@@ -102,7 +102,7 @@ Definition of Normalized Maximum Error (NME) was added to Section 2.3 (Error est
 
 The description of Figure 11 was clarified. The sentence was replaced with the following text:
 
-```Figure 11 summarizes the compression error for all three benchmarks using PSNR metric. PSNR is defined using logarithm (see Equation (9) for denition), and is included here mainly as a comparison to other image-related compression methods whose quality is often expressed by PSNR.```
+```Figure 11 summarizes the compression error for all three benchmarks using PSNR metric. PSNR is defined using logarithm (see Equation (9) for definition), and is included here mainly as a comparison to other image-related compression methods whose quality is often expressed by PSNR.```
 
 * Figure 11: Figure 12: Comparison of Peek signal to noise ratio value for different randomized decompositions. -> Dependence of PSNR value on c and r calculated for different randomized  SVD decompositions. The graph contains the legend with names of benchmarks, which are not described. Add the second x-axis into the graph informing about r-values.
 
@@ -110,7 +110,7 @@ Names in the legend of Figure 11 and Figure 12 were updated to match the names o
 
 * Figure 13: Is it necessary to report 17 times for full SVD decomposition? (blue bars)
 
-We include the columns indicating the full SVD fo Figure 13 in order to show the advantage of randomized SVD and to show the nearly constant computation time for the full SVD.
+We include the columns indicating the full SVD for Figure 13 in order to show the advantage of randomized SVD and to show the nearly constant computation time for the full SVD.
 
 * Figure 13: Now, there is rank as x-axis, in previous graphs there was c. I would recommend two x-axes: r and c. What should be r=0?
 
@@ -136,7 +136,7 @@ was replaced with the following text:
 
 Following text was added to the end of Introduction:
 
-```The rest of the paper is organized as follows. Section 2 contains math ematical background of the SVD compression (i.e. SVD method itself, its use in low-rank matrix approximation, and description of the randomized SVD method). Implementation of the compression algorithm is presented in Section 3. Section 4 summarizes the results of the benchmarks that were designed to measure quality of the output from the compression algorithm, and also the performance of its the implementation. The paper is concluded in Section 5.```
+```The rest of the paper is organized as follows. Section 2 contains mathematical background of the SVD compression (i.e. SVD method itself, its use in low-rank matrix approximation, and description of the randomized SVD method). Implementation of the compression algorithm is presented in Section 3. Section 4 summarizes the results of the benchmarks that were designed to measure quality of the output from the compression algorithm, and also the performance of its the implementation. The paper is concluded in Section 5.```
 
 * Line 154: starting this line, the text does not fit into "Mathematical background", I suggest a new section, e.g. SVD compression.
 
