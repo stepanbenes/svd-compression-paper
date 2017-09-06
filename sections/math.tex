@@ -114,14 +114,11 @@ $\mathit{PSNR}$ is most commonly used to measure the quality of reconstruction o
 
 \subsection{Randomized SVD}
 
-The exact SVD of a $m \times n$ matrix has computational complexity \newline $\mathrm{O}(\mathrm{min}(mn^2, m^2n))$ using the "big-O" notation. When applied on large data sets it tends to be very time-consuming. In \cite{Candes2011, Woolfe2008, Martinsson2011, Szlam2014}, there are described randomized methods for constructing approximate matrix factorizations which offer significant speedups over classical methods.
+There are many algorithms with different approaches to compute singular value decompositions. One approach is based on diagonalization of the matrix which essentially yields the whole decomposition at the same time. The other approach is the use of an iterative algorithm that yields one or several singular values at a time and can be stopped after desired number of singular values and vectors has been computed. Although these algorithms have proven to work very well for relatively small matrices, they are not well suited for using with large data sets. The exact SVD of a $m \times n$ matrix has computational complexity $\mathrm{O}(\mathrm{min}(mn^2, m^2n))$ using the ``big-O'' notation. When applied on large data sets it tends to be very time-consuming. Also, the implementation on modern hardware environment. As these algorithms often need random access to the memory where the input matrix is stored, it can increase communication between different levels in memory hierarchy, which causes higher latency when accessing data. From a numerical linear algebra perspective, an additional problem resulting from increasing matrix sizes is that noise in the data, and propagation of rounding errors, become increasingly problematic.
 
-% TODO: remove the 4 citations; pridat obecne kecy, v jakych oblastech se toto da a neda pouzit - tutorial page 5
-% https://stats.stackexchange.com/questions/159325/what-fast-algorithms-exist-for-computing-truncated-svd - ruzne pristupy k vypoctu SVD
+In \cite{Candes2011, Woolfe2008, Martinsson2011, Szlam2014}, there are described randomized methods for constructing approximate matrix factorizations which offer significant speedups over classical methods. The particular implementation of the randomized decomposition is based on the algorithm described in \cite{Halko2011}. The authors proposed an algorithm for efficient computation of low-rank approximation to a given matrix. The method uses random sampling to identify a subspace that captures most of the action of a matrix. The input matrix is compressed to this subspace, and deterministic manipulations are then used to obtain the desired low-rank factorization. For a matrix that is too large to ﬁt in fast memory, the randomized techniques require only a constant number of passes over the data, as opposed to $\mathrm{O}(k)$ passes for classical algorithms.
 
-The particular implementation of the randomized decomposition is based on the algorithm described in \cite{Halko2011}. The authors proposed an algorithm for efficient computation of low-rank approximation to a given matrix. The algorithm can be split into two main computational stages.
-
-The first stage is to construct a low-dimensional subspace that captures the action of the matrix. To be more formal, this stage is to compute an approximate basis for the range of the input matrix $\mtrx{A}$. This basis matrix $\mtrx{Q}$ is required to have orthonormal columns and
+The algorithm can be split into two main computational stages. The first stage is to construct a low-dimensional subspace that captures the action of the matrix. To be more formal, this stage is to compute an approximate basis for the range of the input matrix $\mtrx{A}$. This basis matrix $\mtrx{Q}$ is required to have orthonormal columns and
 
 \begin{equation}
 \mtrx{A} \approx \mtrx{Q} \mtrx{Q}^{\mathsf{T}} \mtrx{A}.
@@ -152,10 +149,15 @@ $\mtrx{A}$ is then decomposed as
 \noindent
 The algorithm produces matrices $\mtrx{\widetilde{U}}$ and $\mtrx{\widetilde{V}}$ with orthonormal columns being approximations of the left and the right singular vectors of matrix $\mtrx{A}$, and a nonnegative diagonal matrix $\mtrx{\widetilde{S}}$ that contains approximations of the first $r$ singular values of matrix $\mtrx{A}$. For a dense input matrix, randomized SVD algorithm requires $\mathrm{O}(mn \log{r})$ floating-point operations, substantially less than classical algorithms.
 
+% In fact, it is sometimes possible to perform matrix approximation with a single pass over the data.
+
+%If the rank $r$ is not known in advance, it is possible to incorporate error estimators, that allow to determine rank based on estimated error. They can also improve robustness and reliability of the randomized method.
+
+
 % TODO: last sentence put in new paragraph
 % Error estimators: tutorial Page 12
 % Power iterations: research-fb
 
 % TODO: explain gain in operation complexity (see tutorial page 13)
 
-% do answers napsat, ze jsme doplnili ty a ty odstavce, ale ze nehodlame vice vysvetlovat samotny randomized algoritmus, protoze jeho implementace neni predmetem paperu
+% do answers napsat, ze jsme doplnili ty a ty odstavce, ale ze nehodlame vice vysvetlovat samotny randomized algoritmus, protoze jeho implementace neni predmetem paperu. Take zminit, ze byla rozsirena sekce Introduction, aby vse bylo v kontextu.
