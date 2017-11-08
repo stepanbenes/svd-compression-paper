@@ -1,0 +1,21 @@
+Reviewer 1
+
+In my opinion the meaning of the first paragraph of section 3 in the given context is still unclear (or confusing) and needs (a small) correction. It seems to me that authors in the paragraph too generally, and the re-formulation of this paragraph can easily improve the quality of the paper.
+	 
+Let me explain that on the first several sentences (it is not my task to write the paper, that is what the authors should do):
+- "SVD is applied on matrices. The first thing to do is therefore to assemble an input matrix." - ok, but that is what we already know and no new information is given
+- "Results from the FEM are scalar, vector o tensor fields .... As an example ... can serve." - ok, that is what we also know, but how it is related to the first two sentences?
+- "There are two similar sets of results."  - oh, what? how is it related to what was written before?
+- etc.
+
+Reviewer 3
+- Line 155: performance of its the implementation. - delete "the"
+- Line 408: Also, the implementation on modern hardware environment. - the verb is missing
+- Line 425: For a matrix that is too large to t in fast memory, - something is missing
+- Line 538: Once the matrices A are -> Once the matrix A is
+- Line 572: Once the SVD -> Once SVD
+- Line 649: delete "," in eq. (18)
+- Line 684: xmax != xmin -> xmax > xmin
+- Line 716: Storage size of the SVD -> Storage size of SVD
+- Line 1251: use of the SVD -> use of SVD
+- Figure 13: in other graphs x axis is in increasing order for both - rank and compression ratio
